@@ -42,21 +42,13 @@ const {SECRET_KEY, BASE_URL} = process.env;
     // };
     // await sendEmail(verifyEmail);
     // ----------------------------------------------------------
-console.log({
-  token,
-  "user": {
-    "name": newUser.name,
-    "email": newUser.email,
-    "avatarURL": newUser.avatarURL,
-  }
-});
 
     res.status(201).json( {
       token,
       "user": {
         "name": newUser.name,
         "email": newUser.email,
-        "avatarURL": newUser.avatarURL,
+        "avatarURL": newUser.avatarURL
       }
     });
     

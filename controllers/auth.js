@@ -43,18 +43,14 @@ const {SECRET_KEY, BASE_URL} = process.env;
     // await sendEmail(verifyEmail);
     // ----------------------------------------------------------
 
-    const response = {
+    res.status(201).json({
       token,
       "user": {
         "name": newUser.name,
         "email": newUser.email,
         "avatarURL": newUser.avatarURL
       }
-    };
-    console.log(response);
-    
-    res.status(201).json(response);
-    
+    });
   }
 
 // + верифікація електронної пошти юзера  

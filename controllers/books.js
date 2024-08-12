@@ -58,7 +58,6 @@ const { mongoose } = require("mongoose");
 
     // функції для роботи з shopping list
     const getShoppingListBooks = async (req, res) => {
-      console.log("req.user=",req.user);
       const { shopping_list } = req.user;
       res.json(shopping_list);
     }

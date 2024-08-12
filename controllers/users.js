@@ -81,43 +81,6 @@ const {SECRET_KEY, BASE_URL} = process.env;
 
   }
   
-// функції для роботи з shopping list
-  const getShoppingListBooks = async (req, res) => {
-    const { shopping_list } = req.user;
-    res.json(shopping_list);
-  }
-
-  const addBookToShoppingList = async (req, res) => {
-
-    const { id: bookId } = req.params;
-
-    const book = await Book.findById(bookId);
-    if (!book) {
-      throw httpError(404, "Not Found");
-    }
-
-    const { _id: userId, shopping_list } = req.user;
-    
-    if (shopping_list.indexOf(bookId) >= 0){
-      throw httpError(409, `Book ${bookId} is already in shopping list.`);
-    }
-       
-    const result = await User.findByIdAndUpdate( userId, { $push: { shopping_list : bookId.toString() } }, { new: true } );
-
-     res.status(201).json(result);
-  }
-
-  const removeBookFromShoppingList = async (req, res) => {
-      const {  id: bookId } = req.params;
-      const { _id: userId, shopping_list} = req.user;
-
-      if (shopping_list.indexOf(bookId) === -1) {
-        throw httpError(403, `Book ${bookId} is not in shopping list.`);
-      }
-      const result = await User.findByIdAndUpdate( userId, { $pull: { shopping_list : bookId } }, { new: true } );
-      res.json(result);
-  }
-
 
 //---------------------------------------------------------------------------------------------------------
 
@@ -125,8 +88,5 @@ module.exports = {
   getCurrent                 : ctrlWrapper(getCurrent),
   updateUser                 : ctrlWrapper(updateUser),
   subscribe                  : ctrlWrapper(subscribe),
-  getShoppingListBooks       : ctrlWrapper(getShoppingListBooks),
-  addBookToShoppingList      : ctrlWrapper(addBookToShoppingList),
-  removeBookFromShoppingList : ctrlWrapper(removeBookFromShoppingList),
  // updateAvatar: ctrlWrapper(updateAvatar),
 };

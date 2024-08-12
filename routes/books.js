@@ -10,7 +10,12 @@ const router = express.Router();
 router.get('/top-books', ctrl.getTopBooks);
 router.get('/categories',ctrl.getBookCategoryList);
 router.get('/category', authenticate, ctrl.getBooksOfCategory);
+router.get('/shoppinglist', authenticate, ctrl.getShoppingListBooks);
 router.get('/:id', authenticate, validateId, ctrl.getBookById);
+
+router.post('/shoppinglist/add/:id', authenticate, ctrl.addBookToShoppingList);
+
+router.delete('/shoppinglist/remove/:id', authenticate, ctrl.removeBookFromShoppingList);
 
 //------------------------------------------------------------------------------------------------
 

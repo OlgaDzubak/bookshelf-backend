@@ -59,8 +59,11 @@ const { mongoose } = require("mongoose");
     // функції для роботи з shopping list
     const getShoppingListBooks = async (req, res) => {
       const { shopping_list } = req.user;
-      console.log("req.user =", req.user);
-      res.json(shopping_list);
+      const books = await Book.find({"_id": { $in : shopping_list }}, {_id: 1, title:1, author:1, list_name:1, book_image:1, description:1, buy_links:1});
+      if (!books) { 
+        throw httpError(404, "Not found");
+      }
+      res.json(books);
     }
 
     const addBookToShoppingList = async (req, res) => {

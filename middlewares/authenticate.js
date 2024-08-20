@@ -9,9 +9,8 @@ const {SECRET_KEY} = process.env;
 const authenticate = async (req, res, next) => {
     
     const {authorization = ""} = req.headers;
-    const [bearer, accessToken] = authorization.split(" ");
-    
-    
+    const [bearer, accessToken] = authorization.split(" ");  // забираємо з заголовків запиту accessToken    
+
 
     if (bearer !== "Bearer") {
         next(httpError(401, "Not authorized"));
@@ -19,13 +18,12 @@ const authenticate = async (req, res, next) => {
 
     try 
         {
-            const {id} = jwt.verify(accessToken, SECRET_KEY);
-            const user = await User.findById(id);
+            const {id} = jwt.verify(accessToken, SECRET_KEY);     // забираємо з токена id юзера
+            const user = await User.findById(id);                 // шукаємо в базі юзера за йього id
 
-            if (!user || !user.accessToken || !user.refreshToken  || (user.accessToken != accessToken) || (user.refreshToken.exp < (Math.floor(Date.now() / 1000)))){
+            //Видаємо помилку "Not authorized" якщо юзер не знайдений, або 
+            if (!user || !user.accessToken || (user.accessToken != accessToken)){  // (user.accessToken.exp < (Math.floor(Date.now() / 1000)))
                 next(httpError(401, "Not authorized"));
-            }else if (user.accessToken.exp < (Math.floor(Date.now() / 1000))){
-
             }
 
             req.user = user;

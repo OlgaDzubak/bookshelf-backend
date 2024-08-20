@@ -128,6 +128,7 @@ const {SECRET_KEY, BASE_URL} = process.env;
     res.status(204).json({});
   }
 
+// + генерація двох токенов accessToken та refreshToken
   function generateAccessAndRefreshToken(userId, accessMinutes, refreshMinutes){
     
     try{

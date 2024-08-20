@@ -44,9 +44,9 @@ const {SECRET_KEY, BASE_URL} = process.env;
     // await sendEmail(verifyEmail);
     // ----------------------------------------------------------
 
-    
-    res.cookie('refreshToken', tokens.refreshToken, { httpOnly: true, secure: true, sameSite: 'strict' });          // зберігаємо токени в httpOnly-cookie
-    res.cookie('accessToken',  tokens.accessToken,  { httpOnly: true, secure: true, sameSite: 'strict' });          // зберігаємо токени в httpOnly-cookie
+
+    res.cookie('refreshToken', tokens.refreshToken, { httpOnly: true});          // зберігаємо токени в httpOnly-cookie
+    res.cookie('accessToken',  tokens.accessToken,  { httpOnly: true});          // зберігаємо токени в httpOnly-cookie
 
     res.status(201).json({
       //"accessToken": tokens.accessToken, 
@@ -107,8 +107,8 @@ const {SECRET_KEY, BASE_URL} = process.env;
 
     await User.findByIdAndUpdate(user._id, tokens);                               // записуємо токени в базу користувачів
 
-    res.cookie('refreshToken', tokens.refreshToken, { httpOnly: true, secure: true, sameSite: 'strict' });          // зберігаємо токени в httpOnly-cookie
-    res.cookie('accessToken',  tokens.accessToken,  { httpOnly: true, secure: true, sameSite: 'strict' });          // зберігаємо токени в httpOnly-cookie
+    res.cookie('refreshToken', tokens.refreshToken, { httpOnly: true});          // зберігаємо токени в httpOnly-cookie
+    res.cookie('accessToken',  tokens.accessToken,  { httpOnly: true});          // зберігаємо токени в httpOnly-cookie
 
     res.status(200).json( {                                                       // повертаємо в response об'єкт з токенами та юзером
      // "accessToken":  tokens.accessToken,

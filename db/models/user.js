@@ -44,7 +44,11 @@ const now = new Date();
                 ref: 'Book',
                 default:[],
             },
-            token: {
+            accessToken: {
+                type : String,
+                default: "",
+            },
+            refreshToken: {
                 type : String,
                 default: "",
             },

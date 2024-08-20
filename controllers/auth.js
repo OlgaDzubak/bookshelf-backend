@@ -15,19 +15,19 @@ const {SECRET_KEY, BASE_URL} = process.env;
 // + реєстрація нового користувача
   const signup = async (req, res) => {
 
-    const {email, password} = req.body;
+    const {name, email, password} = req.body;                                 // забираємо з запиту дані юзера
     
-    const user = await User.findOne({email});
-   
-    if (user) {
+    const user = await User.findOne({email});                                 // перевіряємо чи немає в базі юзера з таким email
+    if (user) {                                                               // якщо є, то видаємо помилку
       throw httpError(409, "Email in use");
     }
 
-    const hashPassword = await bcrypt.hash(password, 10);
-    const newUser = await User.create({...req.body, password: hashPassword});
+    const hashPassword = await bcrypt.hash(password, 10);                     // хушуємо пароль
+    
+    const newUser = await User.create({name, email, password: hashPassword}); // створюємо в базі нового юзера  
 
-    const tokens = generateAccessAndRefreshToken(newUser._id);
-  
+    const tokens = generateAccessAndRefreshToken(newUser._id, 15, 120);       // генеруємо access та refresh токени
+      
     await User.findByIdAndUpdate(newUser._id, { "accessToken":tokens.accessToken, "refreshToken":tokens.refreshToken }, {new: true});
     
     // ----------------------------------------------------------
@@ -43,6 +43,8 @@ const {SECRET_KEY, BASE_URL} = process.env;
     // };
     // await sendEmail(verifyEmail);
     // ----------------------------------------------------------
+
+    
     res.cookie('refreshToken', tokens.refreshToken, { httpOnly: true, secure: true, sameSite: 'strict' });          // зберігаємо токени в httpOnly-cookie
     res.cookie('accessToken',  tokens.accessToken,  { httpOnly: true, secure: true, sameSite: 'strict' });          // зберігаємо токени в httpOnly-cookie
 
@@ -99,7 +101,7 @@ const {SECRET_KEY, BASE_URL} = process.env;
     const comparePassword = await bcrypt.compare(password, user.password);        // перевіряємо пароль юзера
     if (!comparePassword){ throw httpError(401, "Email or Password is wrong"); }  // якщо пароль не вірний, то видаємо помилку
 
-    const tokens = generateAccessAndRefreshToken(user._id);                       // по id користувача генеруємо два токени accessToken та refreshToken
+    const tokens = generateAccessAndRefreshToken(user._id, 15, 120);              // по id користувача генеруємо два токени accessToken та refreshToken
     
     //if (!user.verify) { throw httpError(401,"Email or password is wrong");}     // перевіряємо чи пройшов email юзера верифікацію
 
@@ -128,19 +130,19 @@ const {SECRET_KEY, BASE_URL} = process.env;
     res.status(204).json({});
   }
 
-  function generateAccessAndRefreshToken(userId){
+  function generateAccessAndRefreshToken(userId, accessMinutes, refreshMinutes){
     
     try{
 
       const payload1 = { id: userId,
         iat: Math.floor(Date.now() / 1000),
-        exp: Math.floor(Date.now() / 1000) + (15 * 60)
+        exp: Math.floor(Date.now() / 1000) + (accessMinutes * 60)
        }; 
       const accessToken = jwt.sign(payload1, SECRET_KEY);
 
       const payload2 = { id: userId,
         iat: Math.floor(Date.now() / 1000),
-        exp: Math.floor(Date.now() / 1000) + (120 * 60)
+        exp: Math.floor(Date.now() / 1000) + (refreshMinutes * 60)
        }; 
       const refreshToken = jwt.sign(payload2, SECRET_KEY);
       

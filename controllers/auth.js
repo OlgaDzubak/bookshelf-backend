@@ -1,11 +1,11 @@
 const {User} = require("../db/models/user");
-const { httpError, ctrlWrapper, sendEmail} = require('../helpers');
+const { httpError, ctrlWrapper, sendEmail, generateAccessAndRefreshToken} = require('../helpers');
 const bcrypt = require("bcrypt");
-const jwt = require('jsonwebtoken');
-const {v4} = require('uuid');
-const path = require("path");
-const { Console } = require("console");
-const fs = require("fs").promises;
+//const jwt = require('jsonwebtoken');
+//const {v4} = require('uuid');
+//const path = require("path");
+//const { Console } = require("console");
+//const fs = require("fs").promises;
 require('dotenv').config();
 
 const {SECRET_KEY, BASE_URL} = process.env; 
@@ -43,18 +43,19 @@ const {SECRET_KEY, BASE_URL} = process.env;
     // };
     // await sendEmail(verifyEmail);
     // ----------------------------------------------------------
+    res.cookie('refreshToken', tokens.refreshToken, { httpOnly: true, secure: true});         // зберігаємо refresh-токен в httpOnly-cookie
+      //  .send("cookie set");
 
+    res.status(201)
+       .json({                                                                   // повертаємо в response об'єкт з access-токеном та юзером
+              "accessToken": tokens.accessToken, 
+              "user": {
+                "name": newUser.name,
+                "email": newUser.email,
+                "avatarURL": newUser.avatarURL
+              }
+            });
 
-    res.cookie('refreshToken', tokens.refreshToken, { httpOnly: true});          // зберігаємо refresh-токен в httpOnly-cookie
-
-    res.status(201).json({                                                       // повертаємо в response об'єкт з access-токеном та юзером
-      "accessToken": tokens.accessToken, 
-      "user": {
-        "name": newUser.name,
-        "email": newUser.email,
-        "avatarURL": newUser.avatarURL
-      }
-    });
   }
 
 // + верифікація електронної пошти юзера  
@@ -100,56 +101,71 @@ const {SECRET_KEY, BASE_URL} = process.env;
     const comparePassword = await bcrypt.compare(password, user.password);        // перевіряємо пароль юзера
     if (!comparePassword){ throw httpError(401, "Email or Password is wrong"); }  // якщо пароль не вірний, то видаємо помилку
 
-    const tokens = generateAccessAndRefreshToken(user._id, 1, 120);              // по id користувача генеруємо два токени accessToken та refreshToken
+    const tokens = generateAccessAndRefreshToken(user._id, 1, 120);               // по id користувача генеруємо два токени accessToken та refreshToken
     
     //if (!user.verify) { throw httpError(401,"Email or password is wrong");}     // перевіряємо чи пройшов email юзера верифікацію
 
     await User.findByIdAndUpdate(user._id, tokens);                               // записуємо токени в базу користувачів
+    
+    res.cookie('refreshToken', tokens.refreshToken, { httpOnly: true, secure: true}) ;         // зберігаємо refresh-токен в httpOnly-cookie
+       //.send("cookie set");
 
-    res.cookie('refreshToken', tokens.refreshToken, { httpOnly: true});          // зберігаємо refresh-токен в httpOnly-cookie
 
-    res.status(200).json( {                                                       // повертаємо в response об'єкт з access-токеном та юзером
-      "accessToken":  tokens.accessToken,
-      "user": {
-        "name": user.name,
-        "email": user.email,
-        "avatarURL": user.avatarURL,
-        "birthdate": user.birthdate,
-        "shopping_list": user.shopping_list,
-      }
-    });
+    res.status(200)
+       .json({                                                                    // повертаємо в response об'єкт з access-токеном, юзером та refresh-токено в кукі
+              "accessToken":  tokens.accessToken,
+              "user": {
+                  "name": user.name,
+                  "email": user.email,
+                  "avatarURL": user.avatarURL,
+                  "birthdate": user.birthdate,
+                  "shopping_list": user.shopping_list,
+              }
+             })
   }
   
+// + оновлення access токена за допомогою refresh токена
+  // const refreshToken = async(req, res) => {
+    
+  //   const {SECRET_KEY} = process.env;
+    
+  //   console.log(req.cookie);
+    
+  //   const refreshToken = req.cookie.refreshToken;
+
+  //   const {id} = jwt.verify(accessToken, SECRET_KEY);
+  //   const user = await User.findById(id);  
+
+  //   if ((!user) || (user.refreshToken != refreshToken) || (refreshToken.exp < (Math.floor(Date.now() / 1000)))){
+  //     next(httpError(401, "Not authorized"));
+  //   }
+
+  //   const tokens = generateAccessAndRefreshToken(user._id, 15, 120);
+
+  //   await User.findByIdAndUpdate(user._id, tokens);                              // записуємо токени в базу користувачів
+
+  //   res.cookie('refreshToken', tokens.refreshToken, { httpOnly: true});          // зберігаємо refresh-токен в httpOnly-cookie
+
+  //   res
+  //   .status(200)
+  //   .json({                                                                    // повертаємо в response об'єкт з access-токеном та юзером
+  //           "accessToken":  tokens.accessToken,
+  //           "user": {
+  //               "name": user.name,
+  //               "email": user.email,
+  //               "avatarURL": user.avatarURL,
+  //               "birthdate": user.birthdate,
+  //               "shopping_list": user.shopping_list,
+  //             }
+  //         })
+  // }
+
 // + розавторизація користувача
   const signout = async (req, res) => {
     const {_id} = req.user;
     const user = await User.findByIdAndUpdate(_id, {accessToken: "", refreshToken: ""});
     if (!user) { throw httpError(401, "Not authorized"); }
     res.status(204).json({});
-  }
-
-// + генерація двох токенов accessToken та refreshToken
-  function generateAccessAndRefreshToken(userId, accessMinutes, refreshMinutes){
-    
-    try{
-
-      const payload1 = { id: userId,
-        iat: Math.floor(Date.now() / 1000),
-        exp: Math.floor(Date.now() / 1000) + (accessMinutes * 60)
-       }; 
-      const accessToken = jwt.sign(payload1, SECRET_KEY);
-
-      const payload2 = { id: userId,
-        iat: Math.floor(Date.now() / 1000),
-        exp: Math.floor(Date.now() / 1000) + (refreshMinutes * 60)
-       }; 
-      const refreshToken = jwt.sign(payload2, SECRET_KEY);
-      
-      return {accessToken, refreshToken};
-
-    }catch(error){
-      throw httpError(500, "Something went wrong while generating access and refresh token"); 
-    }
   }
 
 //---------------------------------------------------------------------------------------------------------

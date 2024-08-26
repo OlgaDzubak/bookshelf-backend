@@ -18,48 +18,54 @@ const authenticate = async (req, res, next) => {
     }
     
     try {
-        console.log(accessToken);
-        try{
-            const {id} = jwt.verify(accessToken, SECRET_KEY);                       // якщо accessToken валідний то забираємо з accessToken id юзера, якщо він не валідний то викинути помилку в catch
-            user = await User.findById(id);                                         // шукаємо в базі юзера за йього id
 
-            console.log(id, user);
-            
-            if (!user || !user.accessToken || (user.accessToken != accessToken)) {  // Видаємо помилку "Not authorized" якщо юзер не знайдений, або якщо юзер немає accessToken або якщо accessToken отриманий із запиту не відповідає accessToken юзера
+        try{
+            const {id} = jwt.verify(accessToken, SECRET_KEY);                                   // якщо accessToken валідний то забираємо з accessToken id юзера, якщо він не валідний то викидаємо помилку в catch
+            user = await User.findById(id);                                                     // шукаємо в базі юзера за йього id
+
+            if (!user || !user.accessToken || (user.accessToken != accessToken)) {              // Видаємо помилку "Not authorized" якщо юзер не знайдений, або якщо юзер немає accessToken або якщо accessToken отриманий із запиту не відповідає accessToken юзера
                 next(httpError(401, "Not authorized"));
             }
             req.user = user;
 
         }catch(error){
+
             if (error="TokenExpiredError"){                                                    // якщо збіг термін дії accesToken то пробуємо оновити його за допомогою RefreshToken
                 
                 const refreshToken = req.cookies.refreshToken;                                 // забираємо refreshToken з кукі запиту
                 
-                const {id} = jwt.verify(refreshToken, SECRET_KEY);                             // перевіряємо refreshToken (якщо токен не валідний, то catch перехватить помилку и видасть 'Not authorized')
+                if (refreshToken){
+                    const {id} = jwt.verify(refreshToken, SECRET_KEY);                             // перевіряємо refreshToken (якщо токен не валідний, то catch перехватить помилку и видасть 'Not authorized')
 
-                user = await User.findById(id);                                                // шукаємо в базі юзера за йього id
-
-                if (!user || (!user.refreshToken) || (user.refreshToken != refreshToken)) {    // якщо юзер не знайдений або refreshToken відсутній або не відповідає refreshToken юзера то видаємо помилку 
+                    user = await User.findById(id);                                                // шукаємо в базі юзера за йього id
+    
+                    if (!user || (!user.refreshToken) || (user.refreshToken != refreshToken)) {    // якщо юзер не знайдений або refreshToken відсутній або не відповідає refreshToken юзера то видаємо помилку 
+                        next(httpError(401, "Not authorized"));
+                    }
+    
+                    const tokens = generateAccessAndRefreshToken(id, 15, 420);                    // генеруємо нову пару accessToken та refreshToken на 15 та 420 хвилин терміну дії відповідно
+    
+                    await User.findByIdAndUpdate(user._id, tokens);                               // оновлюємо токени в базі користувачів
+                    
+                    res.cookie('refreshToken', tokens.refreshToken, { httpOnly: true});           // зберігаємо новий refresh-токен в httpOnly-cookie
+                    
+                    user = await User.findById(id);                                             // повторно шукаємо в базі юзера за йього id
+                    console.log(user);
+                    req.user = user;
+                    //req.user = {...user, accessToken: tokens.accessToken, refreshToken: tokens.refreshToken};
+    
+                }else{
                     next(httpError(401, "Not authorized"));
                 }
-
-                const tokens = generateAccessAndRefreshToken(id, 15, 420);                    // генеруємо нову пару accessToken та refreshToken на 15 та 420 хвилин терміну дії відповідно
-
-                await User.findByIdAndUpdate(user._id, tokens);                               // оновлюємо токени в базі користувачів
-                
-                res.cookie('refreshToken', tokens.refreshToken, { httpOnly: true});           // зберігаємо новий refresh-токен в httpOnly-cookie
-                
-                user = await User.findById(id);                                             // повторно шукаємо в базі юзера за йього id
-                console.log(user);
-                req.user = user;
-                //req.user = {...user, accessToken: tokens.accessToken, refreshToken: tokens.refreshToken};
             }
         }
         next();
         
     }catch(error){
+
         console.log(error);
         next(httpError(401, "Not authorized"));
+        
     }
         
 }

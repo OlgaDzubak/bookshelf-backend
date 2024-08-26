@@ -13,18 +13,18 @@ const authenticate = async (req, res, next) => {
     const {authorization = ""} = req.headers;
     const [bearer, accessToken] = authorization.split(" ");  // забираємо з заголовків запиту accessToken    
     
-    console.log(accessToken);
-
     if (bearer !== "Bearer") {
         next(httpError(401, "Not authorized"));
     }
     
     try {
-
+        console.log(accessToken);
         try{
             const {id} = jwt.verify(accessToken, SECRET_KEY);                       // якщо accessToken валідний то забираємо з accessToken id юзера, якщо він не валідний то викинути помилку в catch
             user = await User.findById(id);                                         // шукаємо в базі юзера за йього id
 
+            console.log(id, user);
+            
             if (!user || !user.accessToken || (user.accessToken != accessToken)) {  // Видаємо помилку "Not authorized" якщо юзер не знайдений, або якщо юзер немає accessToken або якщо accessToken отриманий із запиту не відповідає accessToken юзера
                 next(httpError(401, "Not authorized"));
             }

@@ -47,9 +47,10 @@ const authenticate = async (req, res, next) => {
                 
                 res.cookie('refreshToken', tokens.refreshToken, { httpOnly: true});           // зберігаємо новий refresh-токен в httpOnly-cookie
                 
-                //user = await User.findById(id);                                             // повторно шукаємо в базі юзера за йього id
-                
-                req.user = {...user, accessToken: tokens.accessToken, refreshToken: tokens.refreshToken};
+                user = await User.findById(id);                                             // повторно шукаємо в базі юзера за йього id
+                console.log(user);
+                req.user = user;
+                //req.user = {...user, accessToken: tokens.accessToken, refreshToken: tokens.refreshToken};
             }
         }
         next();

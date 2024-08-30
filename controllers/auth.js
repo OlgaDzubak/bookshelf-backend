@@ -107,13 +107,11 @@ const {SECRET_KEY, BASE_URL} = process.env;
 
     await User.findByIdAndUpdate(user._id, tokens);                               // записуємо токени в базу користувачів
     
-    res.cookie('refreshToken', tokens.refreshToken, { httpOnly: true, secure: true}) ;         // зберігаємо refresh-токен в httpOnly-cookie
-       //.send("cookie set");
-
+    res.cookie('accessToken' , tokens.accessToken , { httpOnly: true });          // зберігаємо access-токен в httpOnly-cookie
+    res.cookie('refreshToken', tokens.refreshToken, { httpOnly: true });          // зберігаємо refresh-токен в httpOnly-cookie
 
     res.status(200)
        .json({                                                                    // повертаємо в response об'єкт з access-токеном, юзером та refresh-токено в кукі
-              "accessToken":  tokens.accessToken,
               "user": {
                   "name": user.name,
                   "email": user.email,

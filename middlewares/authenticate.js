@@ -49,12 +49,20 @@ const authenticate = async (req, res, next) => {
     
                     await User.findByIdAndUpdate(user._id, tokens);                               // оновлюємо токени в базі користувачів
                     
+                    res.cookie('accessToken' , tokens.accessToken,  { httpOnly: true});           // зберігаємо новий access-токен в httpOnly-cookie
                     res.cookie('refreshToken', tokens.refreshToken, { httpOnly: true});           // зберігаємо новий refresh-токен в httpOnly-cookie
                     
-                    user = await User.findById(id);                                             // повторно шукаємо в базі юзера за йього id
+                    user = await User.findById(id);                                               // повторно шукаємо в базі юзера за йього id
+                    
                     console.log(user);
-                    req.user = user;
-                    //req.user = {...user, accessToken: tokens.accessToken, refreshToken: tokens.refreshToken};
+
+                    req.user = {
+                        "name": user.name,
+                        "email": user.email,
+                        "avatarURL": user.avatarURL,
+                        "birthdate": user.birthdate,
+                        "shopping_list": user.shopping_list,
+                    }
     
                 }else{
                     console.log("refreshTokenExpiredError");

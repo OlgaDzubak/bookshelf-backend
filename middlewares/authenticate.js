@@ -13,7 +13,7 @@ const authenticate = async (req, res, next) => {
     const {authorization = ""} = req.headers;
     const [bearer, accessToken] = authorization.split(" ");  // забираємо з заголовків запиту accessToken    
     console.log("accessToken = ", accessToken);
-    
+
     if (bearer !== "Bearer") {
         next(httpError(401, "Not authorized"));
     }
@@ -32,7 +32,8 @@ const authenticate = async (req, res, next) => {
         }catch(error){
 
             if (error="TokenExpiredError"){                                                    // якщо збіг термін дії accesToken то пробуємо оновити його за допомогою RefreshToken
-                
+                console.log("accessTokenExpiredError");
+
                 const refreshToken = req.cookies.refreshToken;                                 // забираємо refreshToken з кукі запиту
                 
                 if (refreshToken){
@@ -56,6 +57,7 @@ const authenticate = async (req, res, next) => {
                     //req.user = {...user, accessToken: tokens.accessToken, refreshToken: tokens.refreshToken};
     
                 }else{
+                    console.log("refreshTokenExpiredError");
                     next(httpError(401, "Not authorized"));
                 }
             }

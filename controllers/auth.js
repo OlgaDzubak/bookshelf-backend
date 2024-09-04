@@ -119,7 +119,7 @@ const {SECRET_KEY, BASE_URL} = process.env;
                   "birthdate": user.birthdate,
                   "shopping_list": user.shopping_list,
               }
-             })
+             });
   }
   
 // + оновлення access токена за допомогою refresh токена

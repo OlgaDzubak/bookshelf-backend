@@ -106,12 +106,12 @@ const {SECRET_KEY, BASE_URL} = process.env;
     //if (!user.verify) { throw httpError(401,"Email or password is wrong");}     // перевіряємо чи пройшов email юзера верифікацію
 
     await User.findByIdAndUpdate(user._id, tokens);                               // записуємо токени в базу користувачів
-    
-    res.cookie('accessToken' , tokens.accessToken , { httpOnly: true });          // зберігаємо access-токен в httpOnly-cookie
-    res.cookie('refreshToken', tokens.refreshToken, { httpOnly: true });          // зберігаємо refresh-токен в httpOnly-cookie
+
+    res.cookie('refreshToken', tokens.refreshToken, { httpOnly: true, secure: true });          // зберігаємо refresh-токен в httpOnly-cookie
 
     res.status(200)
-       .json({                                                                    // повертаємо в response об'єкт з access-токеном, юзером та refresh-токено в кукі
+       .json({  
+              "accessToken": tokens.accessToken,                                                                  // повертаємо в response об'єкт з access-токеном, юзером та refresh-токено в кукі
               "user": {
                   "name": user.name,
                   "email": user.email,

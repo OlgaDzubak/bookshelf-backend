@@ -6,7 +6,6 @@ const {SECRET_KEY} = process.env;
 // + генерація двох токенов accessToken та refreshToken
 function generateAccessAndRefreshToken(userId, accessMinutes, refreshMinutes){
     
-  console.log("I am in generateAccessAndRefreshToken");
   // try{
 
       const payload1 = { id: userId,

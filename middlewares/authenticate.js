@@ -12,7 +12,6 @@ const authenticate = async (req, res, next) => {
     let user={};
     const {authorization = ""} = req.headers;
     const [bearer, accessToken] = authorization.split(" ");  // забираємо з заголовків запиту accessToken    
-    console.log("accessToken = ", accessToken);
 
     if (bearer !== "Bearer") {
         next(httpError(401, "Not authorized"));
@@ -36,35 +35,33 @@ const authenticate = async (req, res, next) => {
 
                 const refreshToken = req.cookies.refreshToken;                                 // забираємо refreshToken з кукі запиту
                 
-                if (refreshToken){
-                    const {id} = jwt.verify(refreshToken, SECRET_KEY);                             // перевіряємо refreshToken (якщо токен не валідний, то catch перехватить помилку и видасть 'Not authorized')
+                try{
+                const {id} = jwt.verify(refreshToken, SECRET_KEY);                             // перевіряємо refreshToken (якщо токен не валідний, то catch перехватить помилку и видасть 'Not authorized')
+                console.log("id = ",id);
+                user = await User.findById(id);                                               // шукаємо в базі юзера за йього id
 
-                    user = await User.findById(id);                                                // шукаємо в базі юзера за йього id
-    
-                    if (!user || (!user.refreshToken) || (user.refreshToken != refreshToken)) {    // якщо юзер не знайдений або refreshToken відсутній або не відповідає refreshToken юзера то видаємо помилку 
-                        next(httpError(401, "Not authorized"));
-                    }
-    
-                    const tokens = generateAccessAndRefreshToken(id, 15, 420);                    // генеруємо нову пару accessToken та refreshToken на 15 та 420 хвилин терміну дії відповідно
-    
-                    await User.findByIdAndUpdate(user._id, tokens);                               // оновлюємо токени в базі користувачів
-                    
-                    res.cookie('accessToken' , tokens.accessToken,  { httpOnly: true});           // зберігаємо новий access-токен в httpOnly-cookie
-                    res.cookie('refreshToken', tokens.refreshToken, { httpOnly: true});           // зберігаємо новий refresh-токен в httpOnly-cookie
-                    
-                    user = await User.findById(id);                                               // повторно шукаємо в базі юзера за йього id
-                    
-                    console.log(user);
+                if (!user || (!user.refreshToken) || (user.refreshToken != refreshToken)) {    // якщо юзер не знайдений або refreshToken відсутній або не відповідає refreshToken юзера то видаємо помилку 
+                    next(httpError(401, "Not authorized"));
+                }
 
-                    req.user = {
-                        "name": user.name,
-                        "email": user.email,
-                        "avatarURL": user.avatarURL,
-                        "birthdate": user.birthdate,
-                        "shopping_list": user.shopping_list,
-                    }
-    
-                }else{
+                const tokens = generateAccessAndRefreshToken(id, 1, 2) //;15, 420);                    // генеруємо нову пару accessToken та refreshToken на 15 та 420 хвилин терміну дії відповідно
+
+                await User.findByIdAndUpdate(user._id, tokens);                               // оновлюємо токени в базі користувачів
+                
+                user = await User.findById(id);                                               // повторно шукаємо в базі юзера за йього id
+
+                res.cookie('refreshToken', user.refreshToken, { httpOnly: true, secure: true});           // зберігаємо новий refresh-токен в httpOnly-cookie
+                
+                req.accessToken = user.accessToken;
+                req.user = {
+                    "name": user.name,
+                    "email": user.email,
+                    "avatarURL": user.avatarURL,
+                    "birthdate": user.birthdate,
+                    "shopping_list": user.shopping_list,
+                }
+
+                }catch(error){
                     console.log("refreshTokenExpiredError");
                     next(httpError(401, "Not authorized"));
                 }

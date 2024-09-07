@@ -16,7 +16,6 @@ const {SECRET_KEY, BASE_URL} = process.env;
 
 // поверення поточного користувача
   const getCurrent = async(req, res) => {
-    console.log(req.user);
     const {id, name, email, avatarURL, shopping_list} = req.user;
     res.status(200).json({id, name, email, avatarURL, shopping_list});
   }

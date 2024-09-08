@@ -60,8 +60,14 @@ const authenticate = async (req, res, next) => {
                     await User.findByIdAndUpdate(user._id, tokens);                               // оновлюємо токени в базі користувачів
                     
                     user = await User.findById(id);                                               // повторно шукаємо в базі юзера за йього id
+                    
+                    const refreshTokenOptions = {
+                        expires: new Date(Date.now() + 120000), 
+                        httpOnly: true, 
+                        secure: true
+                    }
 
-                    res.cookie('refreshToken', user.refreshToken, {expires: new Date(Date.now() + 120000) });           // зберігаємо новий refresh-токен в httpOnly-cookie
+                    res.cookie('refreshToken', user.refreshToken, refreshTokenOptions);           // зберігаємо новий refresh-токен в httpOnly-cookie
                     
                     req.accessToken = user.accessToken;
                     req.user = {

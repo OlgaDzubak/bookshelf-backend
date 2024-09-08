@@ -21,6 +21,8 @@ const authenticate = async (req, res, next) => {
 
         try{
             const {id} = jwt.verify(accessToken, SECRET_KEY);                                   // якщо accessToken валідний то забираємо з accessToken id юзера, якщо він не валідний то викидаємо помилку в catch
+            console.log("good accessToken");
+            
             user = await User.findById(id);                                                     // шукаємо в базі юзера за йього id
 
             if (!user || !user.accessToken || (user.accessToken != accessToken)) {              // Видаємо помилку "Not authorized" якщо юзер не знайдений, або якщо юзер немає accessToken або якщо accessToken отриманий із запиту не відповідає accessToken юзера
@@ -37,14 +39,16 @@ const authenticate = async (req, res, next) => {
         }catch(error){
 
             if (error="TokenExpiredError"){                                                    // якщо збіг термін дії accesToken то пробуємо оновити його за допомогою RefreshToken
+                
                 console.log("accessTokenExpiredError");
 
                 const refreshToken = req.cookies.refreshToken;                                 // забираємо refreshToken з кукі запиту
                 
                 try{
                     const {id} = jwt.verify(refreshToken, SECRET_KEY);                             // перевіряємо refreshToken (якщо токен не валідний, то catch перехватить помилку и видасть 'Not authorized')
-                    
-                    console.log("id = ",id);
+
+                    console.log("good refreshToken");
+
                     user = await User.findById(id);                                               // шукаємо в базі юзера за йього id
 
                     if (!user || (!user.refreshToken) || (user.refreshToken != refreshToken)) {    // якщо юзер не знайдений або refreshToken відсутній або не відповідає refreshToken юзера то видаємо помилку 

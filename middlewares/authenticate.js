@@ -42,7 +42,7 @@ const authenticate = async (req, res, next) => {
                 
                 console.log("accessTokenExpiredError");
 
-                const refreshToken = req.cookies.refreshToken;                                 // забираємо refreshToken з кукі запиту
+                const {refreshToken}= req.cookies;                                 // забираємо refreshToken з кукі запиту
                 console.log("refreshToken=", refreshToken);
                 try{
                     const {id} = jwt.verify(refreshToken, SECRET_KEY);                             // перевіряємо refreshToken (якщо токен не валідний, то catch перехватить помилку и видасть 'Not authorized')
@@ -61,7 +61,7 @@ const authenticate = async (req, res, next) => {
                     
                     user = await User.findById(id);                                               // повторно шукаємо в базі юзера за йього id
 
-                    res.cookie('refreshToken', user.refreshToken, {expires: new Date(Date.now() + 120000), httpOnly: true, secure: true});           // зберігаємо новий refresh-токен в httpOnly-cookie
+                    res.cookie('refreshToken', user.refreshToken, {expires: new Date(Date.now() + 120000) });           // зберігаємо новий refresh-токен в httpOnly-cookie
                     
                     req.accessToken = user.accessToken;
                     req.user = {

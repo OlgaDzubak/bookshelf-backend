@@ -43,7 +43,7 @@ const authenticate = async (req, res, next) => {
                 console.log("accessTokenExpiredError");
 
                 const refreshToken = req.cookies.refreshToken;                                 // забираємо refreshToken з кукі запиту
-                
+                console.log("refreshToken=", refreshToken);
                 try{
                     const {id} = jwt.verify(refreshToken, SECRET_KEY);                             // перевіряємо refreshToken (якщо токен не валідний, то catch перехватить помилку и видасть 'Not authorized')
 

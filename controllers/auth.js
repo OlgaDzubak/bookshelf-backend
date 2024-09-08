@@ -44,7 +44,6 @@ const {SECRET_KEY, BASE_URL} = process.env;
     // await sendEmail(verifyEmail);
     // ----------------------------------------------------------
     res.cookie('refreshToken', tokens.refreshToken, { httpOnly: true, secure: true});         // зберігаємо refresh-токен в httpOnly-cookie
-      //  .send("cookie set");
 
     res.status(201)
        .json({                                                                   // повертаємо в response об'єкт з access-токеном та юзером
@@ -116,7 +115,6 @@ const {SECRET_KEY, BASE_URL} = process.env;
                   "name": user.name,
                   "email": user.email,
                   "avatarURL": user.avatarURL,
-                  "birthdate": user.birthdate,
                   "shopping_list": user.shopping_list,
               }
              });

@@ -19,10 +19,10 @@ const {SECRET_KEY, BASE_URL} = process.env;
     const {id, name, email, avatarURL, shopping_list} = req.user;
     res.status(200).json({
       "user": {
-        "name": user.name,
-        "email": user.email,
-        "avatarURL": user.avatarURL,
-        "shopping_list": user.shopping_list,
+        "name": name,
+        "email": email,
+        "avatarURL": avatarURL,
+        "shopping_list": shopping_list,
       }});      //{id, name, email, avatarURL, shopping_list});
   }
 

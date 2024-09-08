@@ -61,7 +61,7 @@ const authenticate = async (req, res, next) => {
                     
                     user = await User.findById(id);                                               // повторно шукаємо в базі юзера за йього id
 
-                    res.cookie('refreshToken', user.refreshToken, { httpOnly: true, secure: true});           // зберігаємо новий refresh-токен в httpOnly-cookie
+                    res.cookie('refreshToken', user.refreshToken, { httpOnly: true, secure: true, maxAge: 2 * 60 * 1000});           // зберігаємо новий refresh-токен в httpOnly-cookie
                     
                     req.accessToken = user.accessToken;
                     req.user = {

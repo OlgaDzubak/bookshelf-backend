@@ -106,7 +106,7 @@ const {SECRET_KEY, BASE_URL} = process.env;
 
     await User.findByIdAndUpdate(user._id, tokens);                               // записуємо токени в базу користувачів
 
-    res.cookie('refreshToken', tokens.refreshToken, { httpOnly: true, secure: true });          // зберігаємо refresh-токен в httpOnly-cookie
+    res.cookie('refreshToken', tokens.refreshToken, { httpOnly: true, secure: true, maxAge: 2 * 60 * 1000 });          // зберігаємо refresh-токен в httpOnly-cookie
 
     res.status(200)
        .json({  

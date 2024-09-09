@@ -2,7 +2,7 @@ const { httpError, generateAccessAndRefreshToken } = require('../helpers');
 const jwt = require("jsonwebtoken");
 const {User} = require("../db/models/user");
 require('dotenv').config();
-const cookieParser = require('cookie-parser');
+//const cookieParser = require('cookie-parser');
 
 
 const {SECRET_KEY} = process.env;
@@ -16,7 +16,7 @@ const authenticate = async (req, res, next) => {
     const {authorization = ""} = req.headers;
     const [bearer, accessToken] = authorization.split(" ");  // забираємо з заголовків запиту accessToken    
     
-    console.log("Authenticate.req.headers['cookie'] = ", req.headers['cookie']);
+    console.log("Authenticate.req.cookies = ", req.cookies);
 
     if (bearer !== "Bearer") {
         next(httpError(401, "Not authorized"));
@@ -71,7 +71,8 @@ const authenticate = async (req, res, next) => {
                     const refreshTokenOptions = {
                         expires: new Date(Date.now() + (5 * 60000) ), 
                         httpOnly: true, 
-                        secure: true
+                        secure: true,
+                        path: "/"
                     }
 
                     res.cookie('refreshToken', user.refreshToken, refreshTokenOptions);           // зберігаємо новий refresh-токен в httpOnly-cookie

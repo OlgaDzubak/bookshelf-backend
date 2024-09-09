@@ -29,10 +29,10 @@ app.use(cookieParser());
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument)); // Swagger-doc - документація
 
-app.use((req, res, next) => {
-  console.log("req.headers['cookie'] = ", req.headers['cookie']);
-  next();
-})
+// app.use((req, res, next) => {
+//   console.log("req.headers['cookie'] = ", req.headers['cookie']);
+//   next();
+// })
 
 
 app.use('/auth', authRouter);               // корневий маршрут для регістрації, авторизації, розавторизації

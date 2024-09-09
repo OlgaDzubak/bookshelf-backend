@@ -109,8 +109,11 @@ const {SECRET_KEY, BASE_URL} = process.env;
     const refreshTokenOptions = {
       expires: new Date(Date.now() + (5 * 60000) ), // змінити хвилини дії токена (зараз 5 хвилин)
       httpOnly: true, 
-      secure: true
+      secure: true,      
+      path: "/"      
     }
+
+
 
     res.cookie('refreshToken', tokens.refreshToken, refreshTokenOptions);          // зберігаємо refresh-токен в httpOnly-cookie
 

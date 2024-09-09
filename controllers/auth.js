@@ -100,7 +100,7 @@ const {SECRET_KEY, BASE_URL} = process.env;
     const comparePassword = await bcrypt.compare(password, user.password);        // перевіряємо пароль юзера
     if (!comparePassword){ throw httpError(401, "Email or Password is wrong"); }  // якщо пароль не вірний, то видаємо помилку
 
-    const tokens = generateAccessAndRefreshToken(user._id, 1, 120);               // по id користувача генеруємо два токени accessToken та refreshToken
+    const tokens = generateAccessAndRefreshToken(user._id, 1, 2);               // по id користувача генеруємо два токени accessToken та refreshToken
     
     //if (!user.verify) { throw httpError(401,"Email or password is wrong");}     // перевіряємо чи пройшов email юзера верифікацію
 
@@ -111,7 +111,7 @@ const {SECRET_KEY, BASE_URL} = process.env;
       httpOnly: true, 
       secure: true
     }
-   // res.setHeader('Set-Cookie', `refreshToken=${tokens.refreshToken}; Secure; HttpOnly`);
+    //res.setHeader('Set-Cookie', `refreshToken=${tokens.refreshToken}; path="/"; Secure; HttpOnly`);
 
 
     res.cookie('refreshToken', tokens.refreshToken, refreshTokenOptions);          // зберігаємо refresh-токен в httpOnly-cookie

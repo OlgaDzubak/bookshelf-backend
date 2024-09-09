@@ -107,12 +107,10 @@ const {SECRET_KEY, BASE_URL} = process.env;
     await User.findByIdAndUpdate(user._id, tokens);                               // записуємо токени в базу користувачів
 
     const refreshTokenOptions = {
-      expires: new Date(Date.now() + 120000), 
+      expires: new Date(Date.now() + (5 * 60000) ), // змінити хвилини дії токена (зараз 5 хвилин)
       httpOnly: true, 
       secure: true
     }
-    //res.setHeader('Set-Cookie', `refreshToken=${tokens.refreshToken}; path="/"; Secure; HttpOnly`);
-
 
     res.cookie('refreshToken', tokens.refreshToken, refreshTokenOptions);          // зберігаємо refresh-токен в httpOnly-cookie
 

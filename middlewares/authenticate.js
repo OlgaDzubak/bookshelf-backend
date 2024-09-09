@@ -44,7 +44,7 @@ const authenticate = async (req, res, next) => {
 
                 const {refreshToken} = req.cookies;
 
-               // console.log("refreshToken=", refreshToken); // видалити
+                console.log("refreshToken=", refreshToken);
                 
                 try{
                     const {id} = jwt.verify(refreshToken, SECRET_KEY);                             // перевіряємо refreshToken (якщо токен не валідний, то catch перехватить помилку и видасть 'Not authorized')

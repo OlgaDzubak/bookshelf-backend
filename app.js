@@ -24,12 +24,16 @@ const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
-
 app.use(express.static('public'));
-
 app.use(cookieParser());
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument)); // Swagger-doc - документація
+
+app.use((req, res, next) => {
+  console.log("req.headers['cookie'] = ", req.headers['cookie']);
+  next();
+})
+
 
 app.use('/auth', authRouter);               // корневий маршрут для регістрації, авторизації, розавторизації
 app.use('/users', usersRouter);             // корневий маршрут для роботи з залогіненим юзером

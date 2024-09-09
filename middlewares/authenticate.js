@@ -64,7 +64,7 @@ const authenticate = async (req, res, next) => {
                     user = await User.findById(id);                                               // повторно шукаємо в базі юзера за йього id
                     
                     const refreshTokenOptions = {
-                        expires: new Date(Date.now() + 120000), 
+                        expires: new Date(Date.now() + (5 * 60000) ), 
                         httpOnly: true, 
                         secure: true
                     }

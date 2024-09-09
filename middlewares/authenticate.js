@@ -82,7 +82,6 @@ const authenticate = async (req, res, next) => {
                         "name": user.name,
                         "email": user.email,
                         "avatarURL": user.avatarURL,
-                        "birthdate": user.birthdate,
                         "shopping_list": user.shopping_list,
                     }
 

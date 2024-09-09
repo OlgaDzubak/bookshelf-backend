@@ -2,6 +2,7 @@ const { httpError, generateAccessAndRefreshToken } = require('../helpers');
 const jwt = require("jsonwebtoken");
 const {User} = require("../db/models/user");
 require('dotenv').config();
+const cookieParser = require('cookie-parser');
 
 
 const {SECRET_KEY} = process.env;

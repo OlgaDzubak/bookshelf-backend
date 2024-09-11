@@ -115,10 +115,12 @@ const {SECRET_KEY, BASE_URL} = process.env;
     await User.findByIdAndUpdate(user._id, tokens);                               // записуємо токени в базу користувачів
 
     const refreshTokenOptions = {
-      expires: new Date(Date.now() + (5 * 60000) ), // змінити хвилини дії токена (зараз 5 хвилин)
-      httpOnly: true, 
-      secure: true,      
-      path: "/"      
+      expires: new Date(Date.now() + (5 * 60000) ), // змінити хвилини дії токена (зараз 5 хвилин),
+      sameSite: 'Lax',
+      httpOnly: true,
+      secure: false,
+      domain: 'bookshelf-server-4bkr.onrender.com',
+      path: '/',
     }
 
 

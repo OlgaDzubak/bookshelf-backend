@@ -70,11 +70,11 @@ const authenticate = async (req, res, next) => {
                     
                     const refreshTokenOptions = {
                         expires: new Date(Date.now() + (5 * 60000) ), 
-                        httpOnly: true, 
-                        secure: true,
+                        sameSite: 'Lax',
+                        httpOnly: true,
+                        secure: false,
                         domain: 'bookshelf-server-4bkr.onrender.com',
                         path: '/',
-                        sameSite: 'Strict'
                     }
 
                     res.cookie('refreshToken', user.refreshToken, refreshTokenOptions);           // зберігаємо новий refresh-токен в httpOnly-cookie

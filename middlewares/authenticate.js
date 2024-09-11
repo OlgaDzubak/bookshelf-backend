@@ -70,11 +70,7 @@ const authenticate = async (req, res, next) => {
                     
                     const refreshTokenOptions = {
                         expires: new Date(Date.now() + (5 * 60000) ), 
-                        sameSite: 'Lax',
                         httpOnly: true,
-                        secure: false,
-                        domain: 'https://olgadzubak.github.io/bookshelf',
-                        path: '/',
                     }
 
                     res.cookie('refreshToken', user.refreshToken, refreshTokenOptions);           // зберігаємо новий refresh-токен в httpOnly-cookie

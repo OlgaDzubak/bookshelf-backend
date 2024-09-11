@@ -45,11 +45,7 @@ const {SECRET_KEY, BASE_URL} = process.env;
     // ----------------------------------------------------------
     res.cookie('refreshToken', tokens.refreshToken, { 
       expires: new Date(Date.now() + (5 * 60000) ), 
-      sameSite: 'none',
       httpOnly: true,
-      secure: false,
-      domain: 'bookshelf-server-4bkr.onrender.com',
-      path: '/',
     });
 
 

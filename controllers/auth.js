@@ -43,8 +43,15 @@ const {SECRET_KEY, BASE_URL} = process.env;
     // };
     // await sendEmail(verifyEmail);
     // ----------------------------------------------------------
-    res.cookie('refreshToken', tokens.refreshToken, { httpOnly: true, secure: true});         // зберігаємо refresh-токен в httpOnly-cookie
-
+    res.cookie('refreshToken', tokens.refreshToken, { 
+      expires: new Date(Date.now() + (5 * 60000) ), 
+      httpOnly: true, 
+      secure: true,
+      domain: 'bookshelf-server-4bkr.onrender.com',
+      path: '/',
+      sameSite: 'Strict'
+    });
+    
     res.status(201)
        .json({                                                                   // повертаємо в response об'єкт з access-токеном та юзером
               "accessToken": tokens.accessToken, 

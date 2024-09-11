@@ -45,13 +45,14 @@ const {SECRET_KEY, BASE_URL} = process.env;
     // ----------------------------------------------------------
     res.cookie('refreshToken', tokens.refreshToken, { 
       expires: new Date(Date.now() + (5 * 60000) ), 
-      httpOnly: true, 
-      secure: true,
+      sameSite: 'Lax',
+      httpOnly: true,
+      secure: false,
       domain: 'bookshelf-server-4bkr.onrender.com',
       path: '/',
-      sameSite: 'Strict'
     });
-    
+
+
     res.status(201)
        .json({                                                                   // повертаємо в response об'єкт з access-токеном та юзером
               "accessToken": tokens.accessToken, 

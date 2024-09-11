@@ -73,7 +73,7 @@ const authenticate = async (req, res, next) => {
                         sameSite: 'Lax',
                         httpOnly: true,
                         secure: false,
-                        domain: 'bookshelf-server-4bkr.onrender.com',
+                        domain: 'https://olgadzubak.github.io/bookshelf',
                         path: '/',
                     }
 

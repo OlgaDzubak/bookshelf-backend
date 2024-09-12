@@ -20,11 +20,11 @@ const app = express();
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 
-const { BASE_URL } = process.env;
+const { ORIGIN_URL, ORIGIN_URL_local } = process.env;
 
 
 app.use(logger(formatsLogger));
-app.use(cors({ origin: '*', credentials: true }));
+app.use(cors({ origin: [ORIGIN_URL, ORIGIN_URL_local], credentials: true }));
 app.use(express.json());
 app.use(express.static('public'));
 app.use(cookieParser());

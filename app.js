@@ -24,7 +24,7 @@ const { ORIGIN_URL, ORIGIN_URL_local } = process.env;
 
 
 app.use(logger(formatsLogger));
-app.use(cors({ origin: [ORIGIN_URL, ORIGIN_URL_local], credentials: 'include' }));
+app.use(cors({ origin: [ORIGIN_URL, ORIGIN_URL_local], credentials: true }));
 app.use(express.json());
 app.use(express.static('public'));
 app.use(cookieParser());

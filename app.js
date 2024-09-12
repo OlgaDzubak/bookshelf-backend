@@ -24,7 +24,7 @@ const { BASE_URL } = process.env;
 
 
 app.use(logger(formatsLogger));
-app.use(cors({ origin: BASE_URL, credentials: true }));
+app.use(cors({ origin: '*', credentials: true }));
 app.use(express.json());
 app.use(express.static('public'));
 app.use(cookieParser());

@@ -112,7 +112,9 @@ const {SECRET_KEY, BASE_URL} = process.env;
 
     const refreshTokenOptions = {
       expires: new Date(Date.now() + (5 * 60000) ), // змінити хвилини дії токена (зараз 5 хвилин),
-      httpOnly: true
+      httpOnly: true,
+      sameSite: 'none',
+      secure: true
     }
 
     res.status(200)

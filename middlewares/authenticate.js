@@ -40,6 +40,8 @@ const authenticate = async (req, res, next) => {
                 "shopping_list": user.shopping_list,
             }
 
+            next();
+
         }catch(error){
 
             if (error="TokenExpiredError"){                                                    // якщо збіг термін дії accesToken то пробуємо оновити його за допомогою RefreshToken
@@ -70,10 +72,10 @@ const authenticate = async (req, res, next) => {
                     
                     const refreshTokenOptions = {
                         expires: new Date(Date.now() + (5 * 60000) ), 
-                        httpOnly: true
+                        httpOnly: true,
+                        sameSite: 'none',
+                        secure: true
                     }
-
-                    res.cookie('refreshToken', user.refreshToken, refreshTokenOptions);           // зберігаємо новий refresh-токен в httpOnly-cookie
 
                     req.accessToken = user.accessToken;
                     req.user = {
@@ -82,8 +84,9 @@ const authenticate = async (req, res, next) => {
                         "avatarURL": user.avatarURL,
                         "shopping_list": user.shopping_list,
                     }
-
+                    res.cookie('refreshToken', user.refreshToken, refreshTokenOptions);           // зберігаємо новий refresh-токен в httpOnly-cookie
                     
+                    next();                    
 
                 }catch(error){
                     console.log("refreshTokenExpiredError");
@@ -91,7 +94,6 @@ const authenticate = async (req, res, next) => {
                 }
             }
         }
-        next();
         
     }catch(error){
 

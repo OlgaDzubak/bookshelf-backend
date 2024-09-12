@@ -108,16 +108,12 @@ const {SECRET_KEY, BASE_URL} = process.env;
 
     const refreshTokenOptions = {
       expires: new Date(Date.now() + (5 * 60000) ), // змінити хвилини дії токена (зараз 5 хвилин)
-      httpOnly: true, 
-      secure: true,      
-      path: "/"      
+      httpOnly: true,     
     }
 
 
-
-    res.cookie('refreshToken', tokens.refreshToken, refreshTokenOptions);          // зберігаємо refresh-токен в httpOnly-cookie
-
     res.status(200)
+       .cookie('refreshToken', tokens.refreshToken, refreshTokenOptions)
        .json({  
               "accessToken": tokens.accessToken,                                                                  // повертаємо в response об'єкт з access-токеном, юзером та refresh-токено в кукі
               "user": {

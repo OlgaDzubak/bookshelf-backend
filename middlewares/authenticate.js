@@ -10,8 +10,6 @@ const {SECRET_KEY} = process.env;
 // middleware <authenticate> для перевірки токена
 const authenticate = async (req, res, next) => {
     
-    console.log("authenticate");
-
     let user={};
     const {authorization = ""} = req.headers;
     const [bearer, accessToken] = authorization.split(" ");  // забираємо з заголовків запиту accessToken    
@@ -34,12 +32,13 @@ const authenticate = async (req, res, next) => {
                 next(httpError(401, "Not authorized"));
             }
 
+            req.accessToken = user.accessToken;
             req.user = {
                 "name": user.name,
                 "email": user.email,
                 "avatarURL": user.avatarURL,
                 "shopping_list": user.shopping_list,
-            };
+            }
 
         }catch(error){
 
@@ -49,8 +48,6 @@ const authenticate = async (req, res, next) => {
 
                 const {refreshToken} = req.cookies;
 
-                console.log("refreshToken=", refreshToken);
-                
                 try{
                     const {id} = jwt.verify(refreshToken, SECRET_KEY);                             // перевіряємо refreshToken (якщо токен не валідний, то catch перехватить помилку и видасть 'Not authorized')
 
@@ -61,22 +58,23 @@ const authenticate = async (req, res, next) => {
                     if (!user || (!user.refreshToken) || (user.refreshToken != refreshToken)) {    // якщо юзер не знайдений або refreshToken відсутній або не відповідає refreshToken юзера то видаємо помилку 
                         next(httpError(401, "Not authorized"));
                     }
-
-                    const tokens = generateAccessAndRefreshToken(id, 1, 2) //;15, 420);                    // генеруємо нову пару accessToken та refreshToken на 15 та 420 хвилин терміну дії відповідно
-
-                    await User.findByIdAndUpdate(user._id, tokens);                               // оновлюємо токени в базі користувачів
                     
-                    user = await User.findById(id);                                               // повторно шукаємо в базі юзера за йього id
+                    const tokens = generateAccessAndRefreshToken(id, 1, 2) //;15, 420);                    // генеруємо нову пару accessToken та refreshToken на 15 та 420 хвилин терміну дії відповідно
+                    console.log("generateAccessAndRefreshToken");
+                    console.log("tokens = ",tokens);
+                    
+                    await User.findByIdAndUpdate(user._id, tokens);                               // оновлюємо токени в базі користувачів
+
+                    user = await User.findById(id);
+
                     
                     const refreshTokenOptions = {
                         expires: new Date(Date.now() + (5 * 60000) ), 
-                        httpOnly: true, 
-                        secure: true,
-                        path: "/"
+                        httpOnly: true
                     }
 
                     res.cookie('refreshToken', user.refreshToken, refreshTokenOptions);           // зберігаємо новий refresh-токен в httpOnly-cookie
-                    
+
                     req.accessToken = user.accessToken;
                     req.user = {
                         "name": user.name,
@@ -84,6 +82,8 @@ const authenticate = async (req, res, next) => {
                         "avatarURL": user.avatarURL,
                         "shopping_list": user.shopping_list,
                     }
+
+                    
 
                 }catch(error){
                     console.log("refreshTokenExpiredError");

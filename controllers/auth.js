@@ -49,6 +49,7 @@ const {SECRET_KEY, BASE_URL} = process.env;
     res.cookie('refreshToken', tokens.refreshToken, { 
       expires: nextDate, 
       httpOnly: true,
+      sameSite: 'none',
       secure: true 
     });
 
@@ -117,6 +118,7 @@ const {SECRET_KEY, BASE_URL} = process.env;
     const refreshTokenOptions = {
       expires: new Date(Date.now() + (3 * 60 * 1000)),                             // змінити хвилини дії токена (зараз 3 хвилин),
       httpOnly: true,
+      sameSite: 'none',
       secure: true
     }
 

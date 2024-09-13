@@ -74,9 +74,7 @@ const authenticate = async (req, res, next) => {
                         expires: new Date(Date.now() + (3 * 60 * 1000)),
                         httpOnly: true,
                         sameSite: 'strict',
-                        secure: true,
-                        path: '/',
-                        domain: 'https://olgadzubak.github.io'
+                        secure: true
                     }
 
                     req.accessToken = user.accessToken;

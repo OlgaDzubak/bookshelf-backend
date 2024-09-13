@@ -118,8 +118,9 @@ const {SECRET_KEY, BASE_URL} = process.env;
     const refreshTokenOptions = {
       expires: new Date(Date.now() + (3 * 60 * 1000)),                             // змінити хвилини дії токена (зараз 3 хвилин),
       httpOnly: true,
-      sameSite: 'none',
-      secure: true 
+      sameSite: 'strict',
+      secure: true,
+      domain: 'https://olgadzubak.github.io'
     }
 
     res.status(200)

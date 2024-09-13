@@ -73,7 +73,8 @@ const authenticate = async (req, res, next) => {
                     const refreshTokenOptions = {
                         expires: new Date(Date.now() + (3 * 60 * 1000)),
                         httpOnly: true,
-                        secure: true
+                        sameSite: 'none',
+                        secure: true                        
                     }
 
                     req.accessToken = user.accessToken;

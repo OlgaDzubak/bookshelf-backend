@@ -49,7 +49,6 @@ const {SECRET_KEY, BASE_URL} = process.env;
     res.cookie('refreshToken', tokens.refreshToken, { 
       expires: nextDate, 
       httpOnly: true,
-      sameSite: 'strict',
       secure: true 
     });
 

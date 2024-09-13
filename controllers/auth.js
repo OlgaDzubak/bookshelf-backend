@@ -120,7 +120,6 @@ const {SECRET_KEY, BASE_URL} = process.env;
       httpOnly: true,
       sameSite: 'strict',
       secure: true,
-      domain: 'https://olgadzubak.github.io'
     }
 
     res.status(200)

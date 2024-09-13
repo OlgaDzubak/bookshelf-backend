@@ -50,6 +50,7 @@ const {SECRET_KEY, BASE_URL} = process.env;
       expires: nextDate, 
       httpOnly: true,
       sameSite: 'none',
+      partitioned: true,
       secure: true 
     });
 
@@ -119,6 +120,7 @@ const {SECRET_KEY, BASE_URL} = process.env;
       expires: new Date(Date.now() + (3 * 60 * 1000)),                             // змінити хвилини дії токена (зараз 3 хвилин),
       httpOnly: true,
       sameSite: 'none',
+      partitioned: true,
       secure: true
     }
 

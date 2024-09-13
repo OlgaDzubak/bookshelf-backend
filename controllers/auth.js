@@ -114,12 +114,9 @@ const {SECRET_KEY, BASE_URL} = process.env;
     //if (!user.verify) { throw httpError(401,"Email or password is wrong");}     // перевіряємо чи пройшов email юзера верифікацію
 
     await User.findByIdAndUpdate(user._id, tokens);                               // записуємо токени в базу користувачів
-
-    const nextDate = new Date(Date.now() + (5 * 60 * 1000));
-    console.log(nextDate);
     
     const refreshTokenOptions = {
-      expires: nextDate,                                       // змінити хвилини дії токена (зараз 5 хвилин),
+      expires: new Date(Date.now() + (3 * 60 * 1000)),                             // змінити хвилини дії токена (зараз 3 хвилин),
       httpOnly: true,
       sameSite: 'none',
       secure: true 

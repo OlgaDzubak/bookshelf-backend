@@ -22,7 +22,7 @@ const {SECRET_KEY, BASE_URL} = process.env;
       throw httpError(409, "Email in use");
     }
 
-    const hashPassword = await bcrypt.hash(password, 10);                     // хушуємо пароль
+    const hashPassword = await bcrypt.hash(password, 10);                     // хешуємо пароль
     
     const newUser = await User.create({name, email, password: hashPassword}); // створюємо в базі нового юзера  
 
@@ -44,8 +44,10 @@ const {SECRET_KEY, BASE_URL} = process.env;
     // await sendEmail(verifyEmail);
     // ----------------------------------------------------------
     res.cookie('refreshToken', tokens.refreshToken, { 
-      expires: new Date(Date.now() + (5 * 60000) ), 
+      expires: new Date(Date.now() + (3 * 60000) ), 
       httpOnly: true,
+      sameSite: 'none',
+      secure: true
     });
 
 
@@ -111,7 +113,7 @@ const {SECRET_KEY, BASE_URL} = process.env;
     await User.findByIdAndUpdate(user._id, tokens);                               // записуємо токени в базу користувачів
 
     const refreshTokenOptions = {
-      expires: new Date(Date.now() + (5 * 60000) ), // змінити хвилини дії токена (зараз 5 хвилин),
+      expires: new Date(Date.now() + (3 * 60000) ), // змінити хвилини дії токена (зараз 5 хвилин),
       httpOnly: true,
       sameSite: 'none',
       secure: true

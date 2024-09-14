@@ -71,7 +71,7 @@ const authenticate = async (req, res, next) => {
 
                     
                     const refreshTokenOptions = {
-                        expires: new Date(Date.now() + (5 * 60000) ), 
+                        expires: new Date(Date.now() + (3 * 60000) ), 
                         httpOnly: true,
                         sameSite: 'none',
                         secure: true
@@ -84,6 +84,7 @@ const authenticate = async (req, res, next) => {
                         "avatarURL": user.avatarURL,
                         "shopping_list": user.shopping_list,
                     }
+                    
                     res.cookie('refreshToken', user.refreshToken, refreshTokenOptions);           // зберігаємо новий refresh-токен в httpOnly-cookie
                     
                     next();                    

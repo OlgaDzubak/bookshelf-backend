@@ -74,7 +74,7 @@ const authenticate = async (req, res, next) => {
                         expires: new Date(Date.now() + (3 * 60 * 1000)),                             // змінити хвилини дії токена (зараз 3 хвилин),
                         httpOnly: true,
                         secure: true,
-                        sameSite: 'Lax',
+                        sameSite: 'none',
                         partitioned: true                       
                     }
 

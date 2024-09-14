@@ -71,10 +71,11 @@ const authenticate = async (req, res, next) => {
 
                     
                     const refreshTokenOptions = {
-                        expires: new Date(Date.now() + (3 * 60000) ), 
+                        expires: new Date(Date.now() + (3 * 60 * 1000)),                             // змінити хвилини дії токена (зараз 3 хвилин),
                         httpOnly: true,
-                        sameSite: 'none',
-                        secure: true
+                        secure: true,
+                        sameSite: 'Lax',
+                        partitioned: true                       
                     }
 
                     req.accessToken = user.accessToken;

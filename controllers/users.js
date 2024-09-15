@@ -20,8 +20,13 @@ const {SECRET_KEY, BASE_URL} = process.env;
     const {accessToken} = req;
     const {name, email, avatarURL, shopping_list} = req.user;
 
-    res.status(200).json({
-      "accessToken": accessToken,
+    res
+    .status(200)
+    .cookie('accessToken', accessToken, {       
+      expires: new Date(Date.now() + (3 * 60 * 1000)),                             // змінити хвилини дії токена (зараз 3 хвилин),
+      secure: true,
+    })
+    .json({
       "user": {
         "name": name,
         "email": email,

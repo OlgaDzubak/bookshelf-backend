@@ -16,14 +16,18 @@ const {SECRET_KEY, BASE_URL} = process.env;
 
 // поверення поточного користувача
   const getCurrent = async(req, res) => {
-    const {id, name, email, avatarURL, shopping_list} = req.user;
+
+    const {accessToken} = req;
+    const {name, email, avatarURL, shopping_list} = req.user;
+
     res.status(200).json({
+      "accessToken": accessToken,
       "user": {
         "name": name,
         "email": email,
         "avatarURL": avatarURL,
         "shopping_list": shopping_list,
-      }});      //{id, name, email, avatarURL, shopping_list});
+      }});
   }
 
 // оновлення даних про поточного користувача (можемо оновити або аватар, або ім'я юзера - user profile window)

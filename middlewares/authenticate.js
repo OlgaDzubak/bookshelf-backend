@@ -12,10 +12,8 @@ const authenticate = async (req, res, next) => {
     
     let user={};
     const {authorization = ""} = req.headers;
-    const [bearer, accessToken] = authorization.split(" ");  // забираємо з заголовків запиту accessToken    
+    const [bearer, accessToken] = authorization.split(" ");                                     // забираємо з заголовків запиту accessToken    
     
-    console.log("Authenticate.req.cookies = ", req.cookies);
-
     if (bearer !== "Bearer") {
         next(httpError(401, "Not authorized"));
     }
@@ -32,7 +30,7 @@ const authenticate = async (req, res, next) => {
                 next(httpError(401, "Not authorized"));
             }
 
-            req.accessToken = user.accessToken;
+            //req.accessToken = user.accessToken;
             req.user = {
                 "name": user.name,
                 "email": user.email,
@@ -62,6 +60,7 @@ const authenticate = async (req, res, next) => {
                     }
                     
                     const tokens = generateAccessAndRefreshToken(id, 1, 2) //;15, 420);                    // генеруємо нову пару accessToken та refreshToken на 15 та 420 хвилин терміну дії відповідно
+                    
                     console.log("generateAccessAndRefreshToken");
                     console.log("tokens = ",tokens);
                     
@@ -69,6 +68,12 @@ const authenticate = async (req, res, next) => {
 
                     user = await User.findById(id);
 
+                    const accessTokenOptions = {
+                        expires: new Date(Date.now() + (3 * 60 * 1000)),                             // змінити хвилини дії токена (зараз 3 хвилин),
+                        secure: true,
+                        sameSite: 'none',
+                        partitioned: true
+                      }
                     
                     const refreshTokenOptions = {
                         expires: new Date(Date.now() + (3 * 60 * 1000)),                             // змінити хвилини дії токена (зараз 3 хвилин),
@@ -78,7 +83,7 @@ const authenticate = async (req, res, next) => {
                         partitioned: true                       
                     }
 
-                    req.accessToken = user.accessToken;
+                   // req.accessToken = user.accessToken;
                     req.user = {
                         "name": user.name,
                         "email": user.email,
@@ -86,6 +91,7 @@ const authenticate = async (req, res, next) => {
                         "shopping_list": user.shopping_list,
                     }
                     
+                    res.cookie('accesshToken', tokens.accessToken, accessTokenOptions)
                     res.cookie('refreshToken', user.refreshToken, refreshTokenOptions);           // зберігаємо новий refresh-токен в httpOnly-cookie
                     
                     next();                    

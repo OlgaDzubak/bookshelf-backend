@@ -115,7 +115,14 @@ const {SECRET_KEY, BASE_URL} = process.env;
     //if (!user.verify) { throw httpError(401,"Email or password is wrong");}     // перевіряємо чи пройшов email юзера верифікацію
 
     await User.findByIdAndUpdate(user._id, tokens);                               // записуємо токени в базу користувачів
-    
+
+    const accessTokenOptions = {
+      expires: new Date(Date.now() + (3 * 60 * 1000)),                             // змінити хвилини дії токена (зараз 3 хвилин),
+      secure: true,
+      sameSite: 'none',
+      partitioned: true
+    }
+
     const refreshTokenOptions = {
       expires: new Date(Date.now() + (3 * 60 * 1000)),                             // змінити хвилини дії токена (зараз 3 хвилин),
       httpOnly: true,
@@ -125,9 +132,10 @@ const {SECRET_KEY, BASE_URL} = process.env;
     }
 
     res.status(200)
+       .cookie('accesshToken', tokens.accessToken, accessTokenOptions)
        .cookie('refreshToken', tokens.refreshToken, refreshTokenOptions)
        .json({  
-              "accessToken": tokens.accessToken,                                                                  // повертаємо в response об'єкт з access-токеном, юзером та refresh-токено в кукі
+             // "accessToken": tokens.accessToken,                                                                  // повертаємо в response об'єкт з access-токеном, юзером та refresh-токено в кукі
               "user": {
                   "name": user.name,
                   "email": user.email,

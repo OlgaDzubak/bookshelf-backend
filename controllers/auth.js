@@ -132,7 +132,7 @@ const {SECRET_KEY, BASE_URL} = process.env;
     }
 
     res.status(200)
-       .cookie('accesshToken', tokens.accessToken, accessTokenOptions)
+       .cookie('accessToken', tokens.accessToken, accessTokenOptions)
        .cookie('refreshToken', tokens.refreshToken, refreshTokenOptions)
        .json({  
              // "accessToken": tokens.accessToken,                                                                  // повертаємо в response об'єкт з access-токеном, юзером та refresh-токено в кукі

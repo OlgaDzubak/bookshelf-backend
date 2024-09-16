@@ -91,7 +91,7 @@ const authenticate = async (req, res, next) => {
                         "shopping_list": user.shopping_list,
                     }
                     
-                    res.cookie('accesshToken', tokens.accessToken, accessTokenOptions)
+                    res.cookie('accessToken', tokens.accessToken, accessTokenOptions)
                     res.cookie('refreshToken', user.refreshToken, refreshTokenOptions);           // зберігаємо новий refresh-токен в httpOnly-cookie
                     
                     next();                    

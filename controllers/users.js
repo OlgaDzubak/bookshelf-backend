@@ -19,20 +19,20 @@ const {SECRET_KEY, BASE_URL} = process.env;
 
     const {accessToken} = req;
     const {name, email, avatarURL, shopping_list} = req.user;
+    
+    // .cookie('accessToken', accessToken, {       
+    //   expires: new Date(Date.now() + (3 * 60 * 1000)),                             // змінити хвилини дії токена (зараз 3 хвилин),
+    //   secure: true,
+    // })
 
-    res
-    .status(200)
-    .cookie('accessToken', accessToken, {       
-      expires: new Date(Date.now() + (3 * 60 * 1000)),                             // змінити хвилини дії токена (зараз 3 хвилин),
-      secure: true,
-    })
-    .json({
-      "user": {
-        "name": name,
-        "email": email,
-        "avatarURL": avatarURL,
-        "shopping_list": shopping_list,
-      }});
+    res.status(200).json({
+                          "accessToken": accessToken,
+                          "user": {
+                            "name": name,
+                            "email": email,
+                            "avatarURL": avatarURL,
+                            "shopping_list": shopping_list,
+                          }});
   }
 
 // оновлення даних про поточного користувача (можемо оновити або аватар, або ім'я юзера - user profile window)

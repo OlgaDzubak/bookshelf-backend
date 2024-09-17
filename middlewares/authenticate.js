@@ -30,7 +30,7 @@ const authenticate = async (req, res, next) => {
                 next(httpError(401, "Not authorized"));
             }
 
-            //req.accessToken = user.accessToken;
+            req.accessToken = user.accessToken;
             req.user = {
                 "name": user.name,
                 "email": user.email,
@@ -68,13 +68,6 @@ const authenticate = async (req, res, next) => {
 
                     user = await User.findById(id);
 
-                    const accessTokenOptions = {
-                        expires: new Date(Date.now() + (3 * 60 * 1000)),                             // змінити хвилини дії токена (зараз 3 хвилин),
-                        secure: true,
-                        sameSite: 'none',
-                        partitioned: true
-                      }
-                    
                     const refreshTokenOptions = {
                         expires: new Date(Date.now() + (3 * 60 * 1000)),                             // змінити хвилини дії токена (зараз 3 хвилин),
                         httpOnly: true,
@@ -83,7 +76,7 @@ const authenticate = async (req, res, next) => {
                         partitioned: true                       
                     }
 
-                   // req.accessToken = user.accessToken;
+                    req.accessToken = user.accessToken;
                     req.user = {
                         "name": user.name,
                         "email": user.email,
@@ -91,7 +84,6 @@ const authenticate = async (req, res, next) => {
                         "shopping_list": user.shopping_list,
                     }
                     
-                    res.cookie('accessToken', tokens.accessToken, accessTokenOptions)
                     res.cookie('refreshToken', user.refreshToken, refreshTokenOptions);           // зберігаємо новий refresh-токен в httpOnly-cookie
                     
                     next();                    

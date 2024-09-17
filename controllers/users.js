@@ -17,7 +17,7 @@ const {SECRET_KEY, BASE_URL} = process.env;
 // поверення поточного користувача
   const getCurrent = async(req, res) => {
 
-    //const {accessToken} = req;
+    const {accessToken} = req;
     const {name, email, avatarURL, shopping_list} = req.user;
     
     // .cookie('accessToken', accessToken, {       
@@ -26,6 +26,7 @@ const {SECRET_KEY, BASE_URL} = process.env;
     // })
 
     res.status(200).json({
+                          "accessToken": accessToken,
                           "user": {
                             "name": name,
                             "email": email,

@@ -119,7 +119,7 @@ const {SECRET_KEY, BASE_URL} = process.env;
     const accessTokenOptions = {
       expires: new Date(Date.now() + (3 * 60 * 1000)),                             // змінити хвилини дії токена (зараз 3 хвилин),
       secure: true,
-      domain: "https://olgadzubak.github.io/bookshelf/",
+      domain: "https://olgadzubak.github.io",
       sameSite: 'none',
       partitioned: true
     }

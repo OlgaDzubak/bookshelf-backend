@@ -26,7 +26,7 @@ const {SECRET_KEY, BASE_URL} = process.env;
     
     const newUser = await User.create({name, email, password: hashPassword}); // створюємо в базі нового юзера  
 
-    const tokens = generateAccessAndRefreshToken(newUser._id, 24 * 60 , 5 * 24 * 60);       // генеруємо access та refresh токени на добу та 5 діб відповідно
+    const tokens = generateAccessAndRefreshToken(newUser._id, 24*60 , 5*24*60);       // генеруємо access та refresh токени на добу та 5 діб відповідно
       
     await User.findByIdAndUpdate(newUser._id, { "accessToken":tokens.accessToken, "refreshToken":tokens.refreshToken }, {new: true});
     

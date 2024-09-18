@@ -31,12 +31,6 @@ app.use(cookieParser());
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument)); // Swagger-doc - документація
 
-// app.use((req, res, next) => {
-//   console.log("req.headers['cookie'] = ", req.headers['cookie']);
-//   next();
-// })
-
-
 app.use('/auth', authRouter);               // корневий маршрут для регістрації, авторизації, розавторизації
 app.use('/users', usersRouter);             // корневий маршрут для роботи з залогіненим юзером
 app.use('/books', booksRouter);             // корневий маршрут для роботи з колекцією Books 

@@ -1,12 +1,14 @@
 const {User} = require("../db/models/user");
 const { httpError, ctrlWrapper, sendEmail, generateAccessAndRefreshToken} = require('../helpers');
 const bcrypt = require("bcrypt");
+require('dotenv').config();
+
 //const jwt = require('jsonwebtoken');
 //const {v4} = require('uuid');
 //const path = require("path");
 //const { Console } = require("console");
 //const fs = require("fs").promises;
-require('dotenv').config();
+
 
 const {SECRET_KEY, BASE_URL} = process.env; 
 

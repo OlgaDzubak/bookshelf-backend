@@ -1,12 +1,14 @@
 const {User} = require("../db/models/user");
-const {Book} = require("../db/models/book");
-const { httpError, ctrlWrapper, sendEmail } = require('../helpers');
-const bcrypt = require("bcrypt");
-const jwt = require('jsonwebtoken');
-const {v4} = require('uuid');
-const path = require("path");
+const { ctrlWrapper, sendEmail } = require('../helpers');
 const cloudinary = require('cloudinary').v2;
 require('dotenv').config();
+
+//const {Book} = require("../db/models/book");
+//const bcrypt = require("bcrypt");
+//const jwt = require('jsonwebtoken');
+//const {v4} = require('uuid');
+//const path = require("path");
+
 
 
 const {SECRET_KEY, BASE_URL} = process.env;
@@ -20,11 +22,6 @@ const {SECRET_KEY, BASE_URL} = process.env;
     const {accessToken} = req;
     const {name, email, avatarURL, shopping_list} = req.user;
     
-    // .cookie('accessToken', accessToken, {       
-    //   expires: new Date(Date.now() + (3 * 60 * 1000)),                             // змінити хвилини дії токена (зараз 3 хвилин),
-    //   secure: true,
-    // })
-
     res.status(200).json({
                           "accessToken": accessToken,
                           "user": {

@@ -26,7 +26,7 @@ const {SECRET_KEY, BASE_URL} = process.env;
     
     const newUser = await User.create({name, email, password: hashPassword}); // створюємо в базі нового юзера  
 
-    const tokens = generateAccessAndRefreshToken(newUser._id, 24 * 60 , 5 * 24 * 60);       // генеруємо access та refresh токени на добу та 5 діб відповідно
+    const tokens = generateAccessAndRefreshToken(newUser._id, 1 , 2); //24 * 60 , 5 * 24 * 60);       // генеруємо access та refresh токени на добу та 5 діб відповідно
       
     await User.findByIdAndUpdate(newUser._id, { "accessToken":tokens.accessToken, "refreshToken":tokens.refreshToken }, {new: true});
     
@@ -45,7 +45,7 @@ const {SECRET_KEY, BASE_URL} = process.env;
 
     // ----------------------------------------------------------
     res.cookie('refreshToken', tokens.refreshToken, {       
-      expires: new Date(Date.now() + (5 * 24 * 60 * 60 * 1000)),         // термін зберігання refresh-токена в cookie
+      expires: new Date(Date.now() + (3 * 60 * 1000)),       //(5 * 24 * 60 * 60 * 1000)),         // термін зберігання refresh-токена в cookie
       httpOnly: true,
       secure: true,
       sameSite: 'none',
@@ -108,14 +108,14 @@ const {SECRET_KEY, BASE_URL} = process.env;
     const comparePassword = await bcrypt.compare(password, user.password);        // перевіряємо пароль юзера
     if (!comparePassword){ throw httpError(401, "Email or Password is wrong"); }  // якщо пароль не вірний, то видаємо помилку
 
-    const tokens = generateAccessAndRefreshToken(user._id, 24 * 60 , 5 * 24 * 60);               // по id користувача генеруємо два токени accessToken та refreshToken
+    const tokens = generateAccessAndRefreshToken(user._id, 1 , 2);  //24 * 60 , 5 * 24 * 60);               // по id користувача генеруємо два токени accessToken та refreshToken
     
     //if (!user.verify) { throw httpError(401,"Email or password is wrong");}     // перевіряємо чи пройшов email юзера верифікацію
 
     await User.findByIdAndUpdate(user._id, tokens);                               // записуємо токени в базу користувачів
 
     const refreshTokenOptions = {
-      expires: new Date(Date.now() +  (5 * 24 * 60 * 60 * 1000)),                             // термін зберігання refresh-токена в cookie
+      expires: new Date(Date.now() +  (3 * 60 * 1000)),      // (5 * 24 * 60 * 60 * 1000)),                             // термін зберігання refresh-токена в cookie
       httpOnly: true,
       secure: true,
       sameSite: 'none',

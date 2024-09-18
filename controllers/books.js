@@ -37,9 +37,9 @@ const { mongoose } = require("mongoose");
     }
 
     const getBooksOfCategory = async (req, res) =>{
-      const {q, per_page} = req.query;
-      const books = await Book.find({list_name : q}, { _id: 1, title: 1, author : 1, description : 1, book_image: 1, buy_links : 1})
-                              .limit(per_page);
+      const {q} = req.query; //per_page
+      const books = await Book.find({list_name : q}, { _id: 1, title: 1, author : 1, description : 1, book_image: 1, buy_links : 1});
+                              //.limit(per_page);
       if (!books) {
         throw httpError(404, "Not found");
       }

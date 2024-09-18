@@ -63,7 +63,9 @@ const { mongoose } = require("mongoose");
       const { shopping_list } = req.user;
       const books = await Book.find({"_id": { $in : shopping_list }}, {_id: 1, title:1, author:1, list_name:1, book_image:1, description:1, buy_links:1});
       if (!books) { throw httpError(404, "Not found"); }
-      res.json(books);
+      res.json({
+          accessToken: req.accessToken,
+          books});
     }
 
     const addBookToShoppingList = async (req, res) => {

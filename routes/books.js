@@ -13,9 +13,9 @@ router.get('/category', ctrl.getBooksOfCategory);
 router.get('/shoppinglist', authenticate, ctrl.getShoppingListBooks);
 router.get('/:id', validateId, ctrl.getBookById);
 
-router.post('/shoppinglist/add/:id', authenticate, ctrl.addBookToShoppingList);
+router.post('/shoppinglist/add/:id', validateId, authenticate, ctrl.addBookToShoppingList);
 
-router.delete('/shoppinglist/remove/:id', authenticate, validateId, ctrl.removeBookFromShoppingList);
+router.delete('/shoppinglist/remove/:id', validateId, authenticate, ctrl.removeBookFromShoppingList);
 
 //------------------------------------------------------------------------------------------------
 

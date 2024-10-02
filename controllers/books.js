@@ -70,6 +70,8 @@ const { mongoose } = require("mongoose");
     const addBookToShoppingList = async (req, res) => {
 
       const { id: bookId } = req.params;
+      console.log("bookId=",bookId);
+      
 
       const book = await Book.findById(bookId);
       if (!book) {
@@ -77,7 +79,8 @@ const { mongoose } = require("mongoose");
       }
 
       const { _id: userId, shopping_list } = req.user;
-      
+      console.log("userId=",userId, shopping_list);
+
       if (shopping_list.indexOf(bookId) >= 0){
         throw httpError(409, `Book ${bookId} is already in shopping list.`);
       }

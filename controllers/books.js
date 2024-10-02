@@ -1,4 +1,5 @@
 const { Book } = require('../db/models/book');
+const { User } = require('../db/models/user');
 const { httpError, ctrlWrapper} = require('../helpers');
 const { mongoose } = require("mongoose");
 
@@ -80,15 +81,11 @@ const { mongoose } = require("mongoose");
       }
 
       const { id: userId, shopping_list } = req.user;
-      console.log("userId=", userId, shopping_list);
 
-      if (shopping_list.indexOf(bookId) >= 0){
+      if (shopping_list.indexOf(bookId) >= 0){ 
         throw httpError(409, `Book ${bookId} is already in shopping list.`);
       }
 
-      const result1 = await User.findById(userId, {id:1});
-      console.log("result1 = ", result1);
-        
       const result = await User.findByIdAndUpdate( userId, { $push: { shopping_list : bookId.toString() } }, { new: true } );
 
       res.status(201).json(result);

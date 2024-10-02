@@ -79,7 +79,7 @@ const { mongoose } = require("mongoose");
         throw httpError(404, "Not Found");
       }
 
-      const { id: userId, shopping_list } = req.user;
+      const { _id: userId, shopping_list } = req.user;
       console.log("userId=",userId, shopping_list);
 
       if (shopping_list.indexOf(bookId) >= 0){

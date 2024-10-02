@@ -31,7 +31,7 @@ const authenticate = async (req, res, next) => {
 
             req.accessToken = user.accessToken;
             req.user = {
-                "_id": user.id,
+                "id": user.id,
                 "name": user.name,
                 "email": user.email,
                 "avatarURL": user.avatarURL,

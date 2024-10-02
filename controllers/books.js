@@ -74,16 +74,20 @@ const { mongoose } = require("mongoose");
       
 
       const book = await Book.findById(bookId);
+
       if (!book) {
         throw httpError(404, "Not Found");
       }
 
-      const { _id: userId, shopping_list } = req.user;
+      const { id: userId, shopping_list } = req.user;
       console.log("userId=",userId, shopping_list);
 
       if (shopping_list.indexOf(bookId) >= 0){
         throw httpError(409, `Book ${bookId} is already in shopping list.`);
       }
+
+      const result1 = await User.findById( userId );
+      console.log(result1);
         
       const result = await User.findByIdAndUpdate( userId, { $push: { shopping_list : bookId.toString() } }, { new: true } );
 

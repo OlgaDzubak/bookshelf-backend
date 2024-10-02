@@ -23,6 +23,7 @@ const authenticate = async (req, res, next) => {
             const {id} = jwt.verify(accessToken, SECRET_KEY);                                   // якщо accessToken валідний то забираємо з accessToken id юзера, якщо він не валідний то викидаємо помилку в catch
             
             user = await User.findById(id);                                                     // шукаємо в базі юзера за йього id
+            console.log("user=", user);
 
             if (!user || !user.accessToken || (user.accessToken != accessToken)) {              // Видаємо помилку "Not authorized" якщо юзер не знайдений, або якщо юзер немає accessToken або якщо accessToken отриманий із запиту не відповідає accessToken юзера
                 next(httpError(401, "Not authorized"));

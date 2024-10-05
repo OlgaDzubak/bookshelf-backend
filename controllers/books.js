@@ -86,13 +86,14 @@ const { mongoose } = require("mongoose");
 
       const result = await User.findByIdAndUpdate( userId, { $push: { shopping_list : bookId.toString() } }, { new: true } );
       
-      const {name, email, avatarURL, shopping_list: newShopping_list} = result;
-
+      const {accessToken, shopping_list: newShopping_list} = result;
       res.status(201).json({
-          "accessToken": accessToken,
-          "shopping_list": newShopping_list,
-        });
+        "accessToken": accessToken,
+        "shopping_list": newShopping_list,
+      });
+      
 
+      //const {name, email, avatarURL, shopping_list: newShopping_list} = result;
       // res.status(201).json({
       //   "accessToken": accessToken,
       //   "user": {

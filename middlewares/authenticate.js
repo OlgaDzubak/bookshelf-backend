@@ -55,7 +55,7 @@ const authenticate = async (req, res, next) => {
                         next(httpError(401, "Not authorized"));
                     }
                     
-                    const tokens = generateAccessAndRefreshToken(id, 1, 2); //60*24, 5*60*24);   // доба та 5 діб;                    // генеруємо нову пару accessToken та refreshToken на 15 та 420 хвилин терміну дії відповідно
+                    const tokens = generateAccessAndRefreshToken(id, 60*24, 5*60*24);             // доба та 5 діб;  генеруємо нову пару accessToken та refreshToken на 15 та 420 хвилин терміну дії відповідно
                     
                     await User.findByIdAndUpdate(user._id, tokens);                               // оновлюємо токени в базі користувачів
 

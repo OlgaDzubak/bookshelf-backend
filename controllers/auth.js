@@ -117,7 +117,7 @@ const {SECRET_KEY, BASE_URL} = process.env;
     await User.findByIdAndUpdate(user._id, tokens);                               // записуємо токени в базу користувачів
 
     const refreshTokenOptions = {
-      expires: new Date(Date.now() +  (3 * 60 * 1000)),      // (5 * 24 * 60 * 60 * 1000)),                             // термін зберігання refresh-токена в cookie
+      expires: new Date(Date.now() +  (5 * 24 * 60 * 60 * 1000)),                 // термін зберігання refresh-токена в cookie
       httpOnly: true,
       secure: true,
       sameSite: 'none',

@@ -55,14 +55,14 @@ const authenticate = async (req, res, next) => {
                         next(httpError(401, "Not authorized"));
                     }
                     
-                    const tokens = generateAccessAndRefreshToken(id, 24 * 60, 5 * 24 * 60);             // доба та 5 діб;  генеруємо нову пару accessToken та refreshToken на 15 та 420 хвилин терміну дії відповідно
+                    const tokens = generateAccessAndRefreshToken(id, 24 * 60, 5 * 24 * 60);       // доба та 5 діб;  генеруємо нову пару accessToken та refreshToken на 15 та 420 хвилин терміну дії відповідно
                     
                     await User.findByIdAndUpdate(user._id, tokens);                               // оновлюємо токени в базі користувачів
 
                     user = await User.findById(id);
 
                     const refreshTokenOptions = {
-                        expires: new Date(Date.now() + (3 * 60 * 1000)),//(5 * 24 * 60 * 60 * 1000)),                             // змінити термін дії токена (зараз 5 діб),
+                        expires: new Date(Date.now() + (5 * 24 * 60 * 60 * 1000)),                // змінити термін дії токена (зараз 5 діб),
                         httpOnly: true,
                         secure: true,
                         sameSite: 'none',

@@ -71,8 +71,6 @@ const { mongoose } = require("mongoose");
     const addBookToShoppingList = async (req, res) => {
 
       const { id: bookId } = req.params;
-      console.log("bookId=",bookId);
-      
 
       const book = await Book.findById(bookId);
 

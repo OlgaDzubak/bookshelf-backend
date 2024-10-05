@@ -85,8 +85,22 @@ const { mongoose } = require("mongoose");
       }
 
       const result = await User.findByIdAndUpdate( userId, { $push: { shopping_list : bookId.toString() } }, { new: true } );
+      
+      const {name, email, avatarURL, shopping_list: newShopping_list} = result;
 
-      res.status(201).json(result);
+      res.status(201).json({
+          "accessToken": accessToken,
+          "shopping_list": newShopping_list,
+        });
+
+      // res.status(201).json({
+      //   "accessToken": accessToken,
+      //   "user": {
+      //     "name": name,
+      //     "email": email,
+      //     "avatarURL": avatarURL,
+      //     "shopping_list": newShopping_list,
+      //   }});
     }
 
     const removeBookFromShoppingList = async (req, res) => {

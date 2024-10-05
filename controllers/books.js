@@ -91,28 +91,26 @@ const { mongoose } = require("mongoose");
         "accessToken": accessToken,
         "shopping_list": newShopping_list,
       });
-      
 
-      //const {name, email, avatarURL, shopping_list: newShopping_list} = result;
-      // res.status(201).json({
-      //   "accessToken": accessToken,
-      //   "user": {
-      //     "name": name,
-      //     "email": email,
-      //     "avatarURL": avatarURL,
-      //     "shopping_list": newShopping_list,
-      //   }});
     }
 
     const removeBookFromShoppingList = async (req, res) => {
-        const {  id: bookId } = req.params;
-        const { _id: userId, shopping_list} = req.user;
+        
+      const {  id: bookId } = req.params;
+      const { id: userId, shopping_list} = req.user;
 
-        if (shopping_list.indexOf(bookId) === -1) {
-          throw httpError(403, `Book ${bookId} is not in shopping list.`);
-        }
-        const result = await User.findByIdAndUpdate( userId, { $pull: { shopping_list : bookId } }, { new: true } );
-        res.json(result);
+      if (shopping_list.indexOf(bookId) === -1) {
+        throw httpError(403, `Book ${bookId} is not in shopping list.`);
+      }
+
+      const result = await User.findByIdAndUpdate( userId, { $pull: { shopping_list : bookId } }, { new: true } );
+      
+      const {accessToken, shopping_list: newShopping_list} = result;
+      
+      res.status(201).json({
+        "accessToken": accessToken,
+        "shopping_list": newShopping_list,
+      });
     }
 
 //--------------------------------------------------------------------------------------------------------

@@ -84,7 +84,7 @@ const { mongoose } = require("mongoose");
         throw httpError(409, `Book ${bookId} is already in shopping list.`);
       }
 
-      const result = await User.findByIdAndUpdate( userId, { $push: { shopping_list : bookId.toString() } }, { new: true } );
+      const result = await User.findByIdAndUpdate( userId, { $push: { shopping_list : bookId } }, { new: true } );
       
       const {accessToken, shopping_list: newShopping_list} = result;
       res.status(201).json({
@@ -99,13 +99,18 @@ const { mongoose } = require("mongoose");
       const {  id: bookId } = req.params;
       const { id: userId, shopping_list} = req.user;
 
+      console.log("bookId=",bookId);
+      console.log("shopping_list=",shopping_list);
+
       if (shopping_list.indexOf(bookId) === -1) {
         throw httpError(403, `Book ${bookId} is not in shopping list.`);
       }
 
-      const result = await User.findByIdAndUpdate( userId, { $pull: { shopping_list :  bookId.toString() } }, { new: true } );
+      const result = await User.findByIdAndUpdate( userId, { $pull: { shopping_list :  bookId } }, { new: true } );
       
       const {accessToken, shopping_list: newShopping_list} = result;
+
+      console.log("newShopping_list=",newShopping_list);
       
       res.status(201).json({
         "accessToken": accessToken,

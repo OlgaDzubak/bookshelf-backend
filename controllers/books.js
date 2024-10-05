@@ -103,7 +103,7 @@ const { mongoose } = require("mongoose");
         throw httpError(403, `Book ${bookId} is not in shopping list.`);
       }
 
-      const result = await User.findByIdAndUpdate( userId, { $pull: { shopping_list : bookId } }, { new: true } );
+      const result = await User.findByIdAndUpdate( userId, { $pull: { shopping_list :  bookId.toString() } }, { new: true } );
       
       const {accessToken, shopping_list: newShopping_list} = result;
       

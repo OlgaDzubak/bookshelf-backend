@@ -99,9 +99,6 @@ const { mongoose } = require("mongoose");
       const {  id: bookId } = req.params;
       const { id: userId, shopping_list} = req.user;
 
-      console.log("bookId=",bookId);
-      console.log("shopping_list=",shopping_list);
-
       if (shopping_list.indexOf(bookId) === -1) {
         throw httpError(403, `Book ${bookId} is not in shopping list.`);
       }
@@ -110,8 +107,6 @@ const { mongoose } = require("mongoose");
       
       const {accessToken, shopping_list: newShopping_list} = result;
 
-      console.log("newShopping_list=",newShopping_list);
-      
       res.status(201).json({
         "accessToken": accessToken,
         "shopping_list": newShopping_list,

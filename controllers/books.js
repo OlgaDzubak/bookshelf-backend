@@ -70,7 +70,8 @@ const { mongoose } = require("mongoose");
       }
 
     //  const books = await Book.find({"id": { $in : shopping_list }}, {_id: 1, title:1, author:1, list_name:1, book_image:1, description:1, buy_links:1});
-    //  if (!books) { throw httpError(404, "Not found"); }
+    //  проблема з $in - масив книг видає, але не в тому порядку що в shopping_list
+
       res.json({
           accessToken: req.accessToken,
           books});

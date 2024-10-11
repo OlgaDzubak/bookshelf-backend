@@ -64,7 +64,9 @@ const { mongoose } = require("mongoose");
       const books = [];
       
       await shopping_list.forEach(id => {
-        const book = Book.findById(id, {_id: 1, title:1, author:1, list_name:1, book_image:1, description:1, buy_links:1});
+        console.log(id);
+        const book = Book.findById(id, {"_id": 1, title:1, author:1, list_name:1, book_image:1, description:1, buy_links:1});
+        console.log(book);
         if (!book) { throw httpError(404, `Not found ${id}`); }
         books.push(book);
       });

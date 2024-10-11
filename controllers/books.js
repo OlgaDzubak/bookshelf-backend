@@ -61,12 +61,16 @@ const { mongoose } = require("mongoose");
     const getShoppingListBooks = async (req, res) => {
 
       const { shopping_list } = req.user;
-      const books = await shopping_list.map((id)=>{
-        return Book.findById(id, {id: 1, title:1, author:1, list_name:1, book_image:1, description:1, buy_links:1});
+      const books = [];
+      
+      await shopping_list.forEach(id => {
+        const book = Book.findById(id, {_id: 1, title:1, author:1, list_name:1, book_image:1, description:1, buy_links:1});
+        if (!book) { throw httpError(404, `Not found ${id}`); }
+        books.push(book);
       });
 
     //  const books = await Book.find({"id": { $in : shopping_list }}, {_id: 1, title:1, author:1, list_name:1, book_image:1, description:1, buy_links:1});
-      if (!books) { throw httpError(404, "Not found"); }
+    //  if (!books) { throw httpError(404, "Not found"); }
       res.json({
           accessToken: req.accessToken,
           books});

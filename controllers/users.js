@@ -40,6 +40,8 @@ const {SECRET_KEY, BASE_URL} = process.env;
     const {_id, name: currentUserName} = req.user;                                                  //забираємо поточне ім'я юзера
     const {name} = req.body;                                                                        //забираємо нове ім'я юзера
 
+    console.log("name=", newName);
+    
     if (!name) { newUserName = currentUserName}
     else { newUserName = name};
     

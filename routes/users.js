@@ -8,7 +8,7 @@ const router = express.Router();
 // -------------------------------------------------------------------------------------------------------------
 
 router.get('/current', authenticate, ctrl.getCurrent);
-router.patch('/update', authenticate, upload.single("avatar"), ctrl.updateUser);
+router.patch('/update', authenticate,  ctrl.updateUser); //upload.single("avatar"),
 router.post('/subscribe',authenticate, ctrl.subscribe);
 
 // -------------------------------------------------------------------------------------------------------------

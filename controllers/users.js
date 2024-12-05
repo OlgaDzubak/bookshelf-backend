@@ -42,9 +42,13 @@ const {SECRET_KEY, BASE_URL} = process.env;
 
     console.log("name=", name);
 
-    if (!name) { newUserName = currentUserName}
+    if (!name) { 
+      newUserName = currentUserName
+    }
     else { newUserName = name};
     
+    console.log("newUserName=", newUserName);
+
     if (!req.file)                                                                                  // якщо нового файлу аватара немає, то змінемо лише ім'я юзера
       {                                         
         const usr = await User.findByIdAndUpdate(_id, {name: newUserName}, {new: true});            // оновлюємо ім'я поточного юзера   

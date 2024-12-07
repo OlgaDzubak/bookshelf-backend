@@ -53,7 +53,16 @@ const {SECRET_KEY, BASE_URL} = process.env;
       {      
         const usr = await User.findByIdAndUpdate(id, {name: newUserName}, {new: true});            // оновлюємо ім'я поточного юзера   
         
-        res.json({ name: usr.name, avatarURL: usr.avatarURL});
+       // res.json({ name: usr.name, avatarURL: usr.avatarURL});
+
+        res.status(200).json({
+          "accessToken": usr.accessToken,
+          "user": {
+            "name": usr.name,
+            "email": usr.email,
+            "avatarURL": usr.avatarURL,
+            "shopping_list": usr.shopping_list,
+          }});
       }
     else                                                                                            // якщо є новий файл аватара, то закидуємо йього на claudinary, та оновлюємо name і avatatURL юзера
       {        

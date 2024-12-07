@@ -40,8 +40,6 @@ const {SECRET_KEY, BASE_URL} = process.env;
     const {id, name: currentUserName} = req.user;                                                  //забираємо поточне ім'я юзера
     const {name} = req.body;                                                                        //забираємо нове ім'я юзера
     
-    console.log(" name=",  name);
-
     if (!name) { 
       newUserName = currentUserName
     }
@@ -53,8 +51,6 @@ const {SECRET_KEY, BASE_URL} = process.env;
       {      
         const usr = await User.findByIdAndUpdate(id, {name: newUserName}, {new: true});            // оновлюємо ім'я поточного юзера   
         
-       // res.json({ name: usr.name, avatarURL: usr.avatarURL});
-
         res.status(200).json({
           "accessToken": usr.accessToken,
           "user": {

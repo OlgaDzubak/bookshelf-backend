@@ -47,6 +47,7 @@ const {SECRET_KEY, BASE_URL} = process.env;
       newUserName = name
     };
     
+    console.log("req.file", req.file);
     if (!req.file)                                                                             // якщо нового файлу аватара немає, то змінемо лише ім'я юзера
       {      
         const usr = await User.findByIdAndUpdate(id, {name: newUserName}, {new: true});            // оновлюємо ім'я поточного юзера   

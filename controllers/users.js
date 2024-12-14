@@ -37,7 +37,7 @@ const {SECRET_KEY, BASE_URL} = process.env;
 
     let newUserName, newAvatarURL;
     
-    const {id, name: currentUserName} = req.user;                                                  //забираємо поточне ім'я юзера
+    const {_id, name: currentUserName} = req.user;                                                  //забираємо поточне ім'я юзера
     const {name} = req.body;                                                                        //забираємо нове ім'я юзера
     
     if (!name) { 
@@ -47,9 +47,9 @@ const {SECRET_KEY, BASE_URL} = process.env;
       newUserName = name
     };
     
-    if (!req.file)                                                                                  // якщо нового файлу аватара немає, то змінемо лише ім'я юзера
+    if (!req.file)                                                                             // якщо нового файлу аватара немає, то змінемо лише ім'я юзера
       {      
-        const usr = await User.findByIdAndUpdate(id, {name: newUserName}, {new: true});            // оновлюємо ім'я поточного юзера   
+        const usr = await User.findByIdAndUpdate(_id, {name: newUserName}, {new: true});            // оновлюємо ім'я поточного юзера   
         
         res.status(200).json({
           "accessToken": usr.accessToken,

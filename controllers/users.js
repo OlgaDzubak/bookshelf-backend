@@ -38,10 +38,8 @@ const {SECRET_KEY, BASE_URL} = process.env;
     let newUserName, newAvatarURL;
     
     const {id, name: currentUserName} = req.user;                                                  //забираємо поточне ім'я юзера
-    console.log("id=", id);
     const {name} = req.body;                                                                        //забираємо нове ім'я юзера
-    console.log("name=", name);
-
+    
     if (!name) { 
       newUserName = currentUserName
     }
@@ -77,7 +75,7 @@ const {SECRET_KEY, BASE_URL} = process.env;
         
         }).end(req.file.buffer);
 
-        const usr = await User.findByIdAndUpdate(_id, {name: newUserName, avatarURL: newAvatarURL}, {new: true}); // оновлюємо поля name та avatarURL для поточного юзера в базі
+        const usr = await User.findByIdAndUpdate(id, {name: newUserName, avatarURL: newAvatarURL}, {new: true}); // оновлюємо поля name та avatarURL для поточного юзера в базі
           
         res.json({name: usr.name , avatarURL: usr.avatarURL });
       }                

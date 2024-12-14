@@ -56,7 +56,7 @@ const authenticate = async (req, res, next) => {
                     
                     const tokens = generateAccessAndRefreshToken(id, 24 * 60, 5 * 24 * 60);       // доба та 5 діб;  генеруємо нову пару accessToken та refreshToken на 15 та 420 хвилин терміну дії відповідно
                     
-                    await User.findByIdAndUpdate(user._id, tokens);                               // оновлюємо токени в базі користувачів
+                    await User.findByIdAndUpdate(user.id, tokens);                               // оновлюємо токени в базі користувачів
 
                     user = await User.findById(id);
 
@@ -70,6 +70,7 @@ const authenticate = async (req, res, next) => {
 
                     req.accessToken = user.accessToken;
                     req.user = {
+                        "id": user.id,
                         "name": user.name,
                         "email": user.email,
                         "avatarURL": user.avatarURL,

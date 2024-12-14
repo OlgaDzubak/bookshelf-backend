@@ -37,11 +37,11 @@ const {SECRET_KEY, BASE_URL} = process.env;
 
     let newUserName, newAvatarURL;
     
-    console.log("req.body=",req.body);
-
     const {id, name: currentUserName} = req.user;                                                  //забираємо поточне ім'я юзера
-    const {name} = req.body;                                                                        //забираємо нове ім'я юзера
     
+    const {name} = req.body;                                                                        //забираємо нове ім'я юзера
+    console.log("name=", name);
+
     if (!name) { 
       newUserName = currentUserName
     }

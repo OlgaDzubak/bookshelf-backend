@@ -63,6 +63,8 @@ const {SECRET_KEY, BASE_URL} = process.env;
     else                                                                                            // якщо є новий файл аватара, то закидуємо йього на claudinary, та оновлюємо name і avatatURL юзера
       {        
         newAvatarURL = req.file.path;
+        
+        console.log(newAvatarURL);
 
         cloudinary.uploader.upload_stream({ resource_type: 'image' }, (error, result) => {
           if (error) {   

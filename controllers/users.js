@@ -41,10 +41,10 @@ const {SECRET_KEY, BASE_URL} = process.env;
     const {name} = req.body;                                                                        //забираємо нове ім'я юзера
     
     if (!name) { 
-      newUserName = currentUserName
+      newUserName = currentUserName;
     }
     else { 
-      newUserName = name
+      newUserName = name;
     };
     
     console.log("req.file", req.file);
@@ -65,7 +65,8 @@ const {SECRET_KEY, BASE_URL} = process.env;
       {        
         newAvatarURL = req.file.path;
         
-        console.log(newAvatarURL);
+        console.log('newAvatarURL=', newAvatarURL);
+        console.log('newUserName=', newUserName);
 
         cloudinary.uploader.upload_stream({ resource_type: 'image' }, (error, result) => {
           if (error) {   

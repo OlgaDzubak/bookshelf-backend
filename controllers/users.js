@@ -63,7 +63,17 @@ const {SECRET_KEY, BASE_URL} = process.env;
         usr = await User.findByIdAndUpdate(id, {name: newUserName, avatarURL: newAvatarURL}, {new: true}); // оновлюємо поля name та avatarURL для поточного юзера в базі
     };
 
-      res.json({
+    const refreshTokenOptions = {
+      expires: new Date(Date.now() +  (5 * 24 * 60 * 60 * 1000)),                   // термін зберігання refresh-токена в cookie
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      partitioned: true
+    }
+
+    res.status(200)
+ //     .cookie('refreshToken', req.refreshToken, refreshTokenOptions)
+      .json({
         "accessToken": usr.accessToken,
         "user": {
           "name": usr.name,

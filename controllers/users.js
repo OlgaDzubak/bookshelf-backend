@@ -35,38 +35,21 @@ const {SECRET_KEY, BASE_URL} = process.env;
 // оновлення даних про поточного користувача (можемо оновити або аватар, або ім'я юзера - user profile window)
   const updateUser  = async(req, res) => {
 
-    let newUserName, newAvatarURL;
+    let newUserName, newAvatarURL, usr;
     
     const {id, name: currentUserName} = req.user;                                                  //забираємо поточне ім'я юзера
     const {name} = req.body;                                                                        //забираємо нове ім'я юзера
     
     if (!name) { 
       newUserName = currentUserName;
-    }
-    else { 
+    }else { 
       newUserName = name;
     };
     
-    console.log("req.file", req.file);
-    if (!req.file)                                                                             // якщо нового файлу аватара немає, то змінемо лише ім'я юзера
-      {      
-        const usr = await User.findByIdAndUpdate(id, {name: newUserName}, {new: true});            // оновлюємо ім'я поточного юзера   
-        
-        res.status(200).json({
-          "accessToken": usr.accessToken,
-          "user": {
-            "name": usr.name,
-            "email": usr.email,
-            "avatarURL": usr.avatarURL,
-            "shopping_list": usr.shopping_list,
-          }});
-      }
-    else                                                                                            // якщо є новий файл аватара, то закидуємо йього на claudinary, та оновлюємо name і avatatURL юзера
-      {        
+    if (!req.file) {                                                                            // якщо нового файлу аватара немає, то змінемо лише ім'я юзера
+      usr = await User.findByIdAndUpdate(id, {name: newUserName}, {new: true});            // оновлюємо ім'я поточного юзера   
+    }else {                                                                                           // якщо є новий файл аватара, то закидуємо йього на claudinary, та оновлюємо name і avatatURL юзера
         newAvatarURL = req.file.path;
-        
-        console.log('newAvatarURL=', newAvatarURL);
-        console.log('newUserName=', newUserName);
 
         cloudinary.uploader.upload_stream({ resource_type: 'image' }, (error, result) => {
           if (error) {   
@@ -77,10 +60,17 @@ const {SECRET_KEY, BASE_URL} = process.env;
         
         }).end(req.file.buffer);
 
-        const usr = await User.findByIdAndUpdate(id, {name: newUserName, avatarURL: newAvatarURL}, {new: true}); // оновлюємо поля name та avatarURL для поточного юзера в базі
-          
-        res.json({name: usr.name , avatarURL: usr.avatarURL });
-      }                
+        usr = await User.findByIdAndUpdate(id, {name: newUserName, avatarURL: newAvatarURL}, {new: true}); // оновлюємо поля name та avatarURL для поточного юзера в базі
+    };
+
+      res.json({
+        "accessToken": usr.accessToken,
+        "user": {
+          "name": usr.name,
+          "email": usr.email,
+          "avatarURL": usr.avatarURL,
+          "shopping_list": usr.shopping_list,
+        }});                
   }
 
 // надсилання листа з повідомленням про підписку на розсилку

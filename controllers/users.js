@@ -47,14 +47,14 @@ const {SECRET_KEY, BASE_URL} = process.env;
     };
     
     if (!req.file) {                                                                            // якщо нового файлу аватара немає, то змінемо лише ім'я юзера
-      usr = await User.findByIdAndUpdate(id, {name: newUserName}, {new: true});            // оновлюємо ім'я поточного юзера   
-    }else {                                                                                           // якщо є новий файл аватара, то закидуємо йього на claudinary, та оновлюємо name і avatatURL юзера
+      usr = await User.findByIdAndUpdate(id, {name: newUserName}, {new: true});                 // оновлюємо ім'я поточного юзера   
+    }else {                                                                                     // якщо є новий файл аватара, то закидуємо йього на claudinary, та оновлюємо name і avatatURL юзера
         newAvatarURL = req.file.path;
 
         cloudinary.uploader.upload_stream({ resource_type: 'image' }, (error, result) => {
           if (error) {   
               console.error(error);
-              return res.status(500).json({ message: 'Помилка при завантаженні на Cloudinary' });
+              return res.status(500).json({ message: 'Cloudinary downloading error' });
           }
           const { secure_url: newAvatarURL} = result;                                                 // отрисуємо з claudinary новий URL аватара 
         

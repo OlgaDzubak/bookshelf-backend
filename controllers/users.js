@@ -1,5 +1,5 @@
 const {User} = require("../db/models/user");
-const { ctrlWrapper, sendEmail } = require('../helpers');
+const {httpError,  ctrlWrapper, sendEmail } = require('../helpers');
 const cloudinary = require('cloudinary').v2;
 require('dotenv').config();
 
@@ -54,7 +54,8 @@ const {SECRET_KEY, BASE_URL} = process.env;
         cloudinary.uploader.upload_stream({ resource_type: 'image' }, (error, result) => {
           if (error) {   
               console.error(error);
-              return res.status(500).json({ message: 'Cloudinary downloading error' });
+              throw httpError(422, "Cloudinary downloading error : file format not allowed");
+              //return res.status(500).json({ message: 'Cloudinary downloading error: ' + error.message });
           }
           const { secure_url: newAvatarURL} = result;                                                 // отрисуємо з claudinary новий URL аватара 
         

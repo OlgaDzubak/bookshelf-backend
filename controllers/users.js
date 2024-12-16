@@ -53,8 +53,9 @@ const {SECRET_KEY, BASE_URL} = process.env;
 
         cloudinary.uploader.upload_stream({ resource_type: 'image' }, (error, result) => {
           if (error) {   
-              console.error(error);
-              return res.status(422).json({ message: 'Cloudinary downloading error: ' + error.message });
+              console.error("cloudinary error = ",error);
+              res.status(422).json({ message: 'Cloudinary downloading error: ' + error.message });
+              return;
           }
           const { secure_url: newAvatarURL} = result;                                                 // отрисуємо з claudinary новий URL аватара 
         

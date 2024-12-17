@@ -11,22 +11,20 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: async (req, file) => {
-    // Determine the folder based on file properties or request data
+    
     let folder;
+
     if (file.fieldname === 'avatar') {
       folder = 'avatars';
-    } else if (file.fieldname === "drinkThumb") {
-      folder = "drinks";
-    } else {
-      folder = "others";
     }
+
     return {
       folder: folder,
-      allowed_formats: ["jpg", "png"], // Adjust the allowed formats as needed
-      public_id: file.originalname,    // Use original filename as the public ID
+      allowed_formats: ["jpg", "png"],
+      public_id: file.originalname, 
       transformation: [
-        { height: 350, crop: "scale" },
-        { height: 700, crop: "scale" },
+        { height: 250, crop: "scale" },
+        { height: 250, crop: "scale" },
       ],
     };
   },

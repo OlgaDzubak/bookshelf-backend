@@ -50,14 +50,14 @@ const {SECRET_KEY, BASE_URL} = process.env;
       usr = await User.findByIdAndUpdate(id, {name: newUserName}, {new: true});                 // оновлюємо ім'я поточного юзера   
     }else {                                                                                     // якщо є новий файл аватара, то закидуємо йього на claudinary, та оновлюємо name і avatatURL юзера
         newAvatarURL = req.file.path;
-        // cloudinary.uploader.upload_stream({ resource_type: 'image' }, (error, result) => {
-        //   if (error) {  
-        //       console.error(error);
-        //       return res.status(500).json({ message: 'Cloudinary downloading error: '});
-        //   }
-        //   const { secure_url: newAvatarURL} = result;                                                 // отрисуємо з claudinary новий URL аватара 
+        cloudinary.uploader.upload_stream({ resource_type: 'image' }, (error, result) => {
+          if (error) {  
+              console.error(error);
+              return res.status(500).json({ message: 'Cloudinary downloading error: '});
+          }
+          const { secure_url: newAvatarURL} = result;                                                 // отрисуємо з claudinary новий URL аватара 
         
-        // }).end(req.file.buffer);
+        }).end(req.file.buffer);
 
         usr = await User.findByIdAndUpdate(id, {name: newUserName, avatarURL: newAvatarURL}, {new: true}); // оновлюємо поля name та avatarURL для поточного юзера в базі
     };

@@ -3,7 +3,7 @@ const validateId =  require('./validateId');
 const validateFavorite =  require('./validateFavorite');
 const validateQuery = require('./validateQuery');
 const authenticate =  require('./authenticate');
-const upload = require('./multerUpload');
+const upload = require('./upload');
 
 
 

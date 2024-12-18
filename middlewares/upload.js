@@ -1,7 +1,7 @@
 const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const multer = require('multer');
-const { httpError } = require('../helpers');
+
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME,
@@ -33,16 +33,8 @@ const storage = new CloudinaryStorage({
       },
 });
 
-const upload = (req, file, next)=>{ 
-  console.log("я в multer");
-  try{
-    multer({ storage });
-  }catch(error){
-    console.log("multer error = ", error);
-    next(httpError(500, "Cloudinary uploading error!"));
-  }
-}
-
+const upload = multer({ storage });
+  
 
 //----------------------------------------------------------------------------------------------
 

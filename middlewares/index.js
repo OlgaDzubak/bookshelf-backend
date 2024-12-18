@@ -4,6 +4,7 @@ const validateFavorite =  require('./validateFavorite');
 const validateQuery = require('./validateQuery');
 const authenticate =  require('./authenticate');
 const upload = require('./upload');
+const multerUpload = require('./multerUpload');
 
 
 module.exports = { 

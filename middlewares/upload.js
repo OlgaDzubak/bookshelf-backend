@@ -13,7 +13,6 @@ const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: async (req, file) => {
 
-          console.log("я в upload new CloudinaryStorage");
             let folder;
       
             if (file.fieldname === 'avatar') {
@@ -21,7 +20,6 @@ const storage = new CloudinaryStorage({
               folder = 'avatars';
             }
             
-            console.log("я перед return CloudinaryStorage");
             return {
               folder: folder,
               allowed_formats: ["jpg", "png"],
@@ -34,25 +32,9 @@ const storage = new CloudinaryStorage({
       },
 });
 
-const upload = multer({ 
-                      storage, 
-                     // fileFilter: function (req, file, cb) {
-                     //     return cb(next(httpError(500, "Cloudinary uploading error. Wrong file format! Only images are allowed")));
-                     // }, 
-               });
-
-
-const multerUpload = async (req, res, next) => {
-  try{
-    upload.single('avatar');
-    next();
-  }catch(error){
-    console.log("multerUpload error = ",error);    
-   // next(httpError(500, "Cloudinary uploading error. Wrong file format. Only images are allowed."));
-  }
-  
+const upload = multer({ storage, });
 }
 
 //----------------------------------------------------------------------------------------------
 
-module.exports = multerUpload;
+module.exports = upload;

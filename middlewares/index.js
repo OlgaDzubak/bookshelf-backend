@@ -3,7 +3,7 @@ const validateId =  require('./validateId');
 const validateFavorite =  require('./validateFavorite');
 const validateQuery = require('./validateQuery');
 const authenticate =  require('./authenticate');
-const multerUpload = require('./multerUpload');
+const upload = require('./multerUpload');
 
 
 
@@ -13,5 +13,5 @@ module.exports = {
     validateFavorite, 
     validateQuery,
     authenticate, 
-    multerUpload,
+    upload,
 };

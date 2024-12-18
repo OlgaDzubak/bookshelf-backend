@@ -1,5 +1,5 @@
 const {User} = require("../db/models/user");
-const {ctrlWrapper, sendEmail } = require('../helpers');
+const {httpError, ctrlWrapper, sendEmail } = require('../helpers');
 const cloudinary = require('cloudinary').v2;
 require('dotenv').config();
 

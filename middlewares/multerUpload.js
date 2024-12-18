@@ -42,7 +42,7 @@ const upload = multer({
                });
 
 
-const multerUpload = async (req, res, next){
+const multerUpload = async (req, res, next) => {
   try{
     upload.single('avatar');
     next();

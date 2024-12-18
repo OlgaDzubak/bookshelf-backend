@@ -33,15 +33,11 @@ const {SECRET_KEY, BASE_URL} = process.env;
   }
 
 // оновлення даних про поточного користувача (можемо оновити або аватар, або ім'я юзера - user profile window)
-  const updateUser  = async(req, res) => {
+  const updateUser = async (req, res) => {
 
     let newUserName, newAvatarURL, usr;
     
-    console.log("Я в updateUser");
-    console.log("req.body", req.body);
-    console.log("req.file", req.file);
-
-    const {id, name: currentUserName} = req.user;                                                  //забираємо поточне ім'я юзера
+    const {id, name: currentUserName} = req.user;                                                   //забираємо поточне ім'я юзера
     const {name} = req.body;                                                                        //забираємо нове ім'я юзера
     
     if (!name) { 
@@ -110,5 +106,4 @@ module.exports = {
   getCurrent                 : ctrlWrapper(getCurrent),
   updateUser                 : ctrlWrapper(updateUser),
   subscribe                  : ctrlWrapper(subscribe),
- // updateAvatar: ctrlWrapper(updateAvatar),
 };

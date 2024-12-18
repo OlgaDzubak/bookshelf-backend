@@ -2,6 +2,7 @@ const {User} = require("../db/models/user");
 const { httpError, ctrlWrapper, sendEmail, generateAccessAndRefreshToken} = require('../helpers');
 const bcrypt = require("bcrypt");
 require('dotenv').config();
+const gravatar = require("gravatar");
 
 //const jwt = require('jsonwebtoken');
 //const {v4} = require('uuid');
@@ -25,8 +26,10 @@ const {SECRET_KEY, BASE_URL} = process.env;
     }
 
     const hashPassword = await bcrypt.hash(password, 10);                     // хешуємо пароль
+
+    const avatarURL = gravatar.url(email);
     
-    const newUser = await User.create({name, email, password: hashPassword}); // створюємо в базі нового юзера  
+    const newUser = await User.create({name, email, password: hashPassword, avatarURL}); // створюємо в базі нового юзера  
 
     const tokens = generateAccessAndRefreshToken(newUser._id, 1 , 2); //24 * 60 , 5 * 24 * 60);       // генеруємо access та refresh токени на добу та 5 діб відповідно
       

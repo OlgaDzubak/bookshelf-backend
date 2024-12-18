@@ -1,7 +1,7 @@
 const {upload}  = require("../middlewares");
 const { httpError } = require('../helpers');
 
-const multerUpload = (req, req, next) =>{
+const multerUpload = (req, res, next) =>{
     try{
         upload.single("avatar");
         next();

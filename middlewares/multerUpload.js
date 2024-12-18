@@ -13,4 +13,4 @@ const multerUpload = (req, req, next) =>{
 
 }
 
-module.export = multerUpload;
+module.exports = multerUpload;

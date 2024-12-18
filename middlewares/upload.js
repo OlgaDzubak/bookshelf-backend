@@ -42,6 +42,17 @@ const upload = multer({
                });
 
 
+const multerUpload = async (req, res, next){
+  try{
+    upload.single('avatar');
+    next();
+  }catch(error){
+    console.log("multerUpload error = ",error);    
+   // next(httpError(500, "Cloudinary uploading error. Wrong file format. Only images are allowed."));
+  }
+  
+}
+
 //----------------------------------------------------------------------------------------------
 
-module.exports = upload;
+module.exports = multerUpload;

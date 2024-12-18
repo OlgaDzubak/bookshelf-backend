@@ -8,10 +8,6 @@ const {SECRET_KEY} = process.env;
 
 // middleware <authenticate> для перевірки токена
 const authenticate = async (req, res, next) => {
-    
-    console.log("Я в authenticate");
-    console.log("req.body", req.body);
-    console.log("req.file", req.file);
 
     let user={};
     const {authorization = ""} = req.headers;

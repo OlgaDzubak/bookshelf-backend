@@ -105,6 +105,8 @@ const {SECRET_KEY, BASE_URL} = process.env;
 // + авторизація користувача
   const signin = async (req, res) => {
     
+    console.log(req.body);
+    
     const {email, password} = req.body;                                           // отримуэмо з запиту email та пароль користувача
     const user = await User.findOne({email});                                     // перевіряємо наявність користувача, шукаємо за email
     

@@ -2,8 +2,6 @@ const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const multer = require('multer');
 
-console.log("я в upload");
-
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME,
   api_key: process.env.CLOUDINARY_KEY,
@@ -14,7 +12,7 @@ const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: async (req, file) => {
     
-    console.log("я в new CloudinaryStorage");
+    console.log("я в upload new CloudinaryStorage");
     
     let folder;
 
@@ -23,7 +21,7 @@ const storage = new CloudinaryStorage({
       folder = 'avatars';
     }
     
-    console.log("я перед return");
+    console.log("я перед return CloudinaryStorage");
     return {
       folder: folder,
       allowed_formats: ["jpg", "png"],

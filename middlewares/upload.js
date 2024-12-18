@@ -36,9 +36,9 @@ const storage = new CloudinaryStorage({
 
 const upload = multer({ 
                       storage, 
-                      fileFilter: function (req, file, cb) {
-                          return cb(next(httpError(500, "Cloudinary uploading error. Wrong file format! Only images are allowed")));
-                      }, 
+                     // fileFilter: function (req, file, cb) {
+                     //     return cb(next(httpError(500, "Cloudinary uploading error. Wrong file format! Only images are allowed")));
+                     // }, 
                });
 
 

@@ -9,7 +9,7 @@ const router = express.Router();
 
 router.get('/current', authenticate, ctrl.getCurrent);
 router.post('/subscribe', authenticate, ctrl.subscribe);
-router.patch('/update', authenticate, validateBody(schemas.updateSchema), upload.single('avatar'), ctrl.updateUser); //
+router.patch('/update', authenticate, ctrl.updateUser); //validateBody(schemas.updateSchema), upload.single('avatar'), 
 
 
 // -------------------------------------------------------------------------------------------------------------

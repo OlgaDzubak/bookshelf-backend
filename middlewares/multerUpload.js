@@ -1,9 +1,9 @@
 const {upload}  = require("../middlewares");
 const { httpError } = require('../helpers');
 
-const multerUpload = async (req, res, next) =>{
+const multerUpload = (req, file, next) =>{
     try{
-        await upload.single("avatar");
+        upload.single("avatar");
         next();
     }catch(error){
         console.log("error",error);

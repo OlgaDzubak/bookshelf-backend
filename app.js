@@ -40,7 +40,7 @@ app.use((req, res) => {
 })
 
 app.use((err, req, res, next) => {
-  console.log("err = ",err);
+  console.log("last block app.use err = ",err);
   const {status = 500, message = "Server error"} = err;
   res.status(status).json({ message, });
 })

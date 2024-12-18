@@ -1,5 +1,5 @@
 const {User} = require("../db/models/user");
-const {ctrlWrapper, sendEmail } = require('../helpers');
+const {httpError, ctrlWrapper, sendEmail } = require('../helpers');
 const cloudinary = require('cloudinary').v2;
 require('dotenv').config();
 
@@ -37,6 +37,8 @@ const {SECRET_KEY, BASE_URL} = process.env;
 
     let newUserName, newAvatarURL, usr;
     
+    console.log("Я в updateUser");
+    
     const {id, name: currentUserName} = req.user;                                                  //забираємо поточне ім'я юзера
     const {name} = req.body;                                                                        //забираємо нове ім'я юзера
     
@@ -45,6 +47,9 @@ const {SECRET_KEY, BASE_URL} = process.env;
     }else { 
       newUserName = name;
     };
+
+    console.log(req.body);
+    console.log(req.file);
     
     if (!req.file) {                                                                            // якщо нового файлу аватара немає, то змінемо лише ім'я юзера
       usr = await User.findByIdAndUpdate(id, {name: newUserName}, {new: true});                 // оновлюємо ім'я поточного юзера   
@@ -53,7 +58,7 @@ const {SECRET_KEY, BASE_URL} = process.env;
         cloudinary.uploader.upload_stream({ resource_type: 'image' }, (error, result) => {
           if (error) {  
               console.error(error);
-              return res.status(500).json({ message: 'Cloudinary downloading error: '});
+              return res.status(500).json({message: "Cloudinary uploading error."});
           }
           const { secure_url: newAvatarURL} = result;                                                 // отрисуємо з claudinary новий URL аватара 
         

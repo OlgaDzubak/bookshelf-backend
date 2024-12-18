@@ -19,9 +19,11 @@ const storage = new CloudinaryStorage({
     let folder;
 
     if (file.fieldname === 'avatar') {
+      console.log("file.fieldname === 'avatar'");
       folder = 'avatars';
     }
-
+    
+    console.log("я перед return");
     return {
       folder: folder,
       allowed_formats: ["jpg", "png"],

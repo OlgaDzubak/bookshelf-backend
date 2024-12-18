@@ -16,7 +16,6 @@ const storage = new CloudinaryStorage({
             let folder;
       
             if (file.fieldname === 'avatar') {
-              console.log("file.fieldname === 'avatar'");
               folder = 'avatars';
             }
             
@@ -33,7 +32,7 @@ const storage = new CloudinaryStorage({
 });
 
 const upload = multer({ storage, });
-}
+
 
 //----------------------------------------------------------------------------------------------
 

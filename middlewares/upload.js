@@ -14,6 +14,8 @@ const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: async (req, file) => {
     
+    console.log("я в new CloudinaryStorage");
+    
     let folder;
 
     if (file.fieldname === 'avatar') {

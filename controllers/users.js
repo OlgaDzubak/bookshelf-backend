@@ -24,7 +24,7 @@ const {SECRET_KEY, BASE_URL} = process.env;
                           }});
   }
 
-// оновлення даних про поточного користувача (можемо оновити або аватар, або ім'я юзера - user profile window)
+// оновлення даних про поточного користувача (можемо оновити або аватар та/або ім'я юзера)
   const updateUser = async (req, res) => {
 
     if (req.fileValidationError){

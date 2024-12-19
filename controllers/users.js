@@ -3,14 +3,6 @@ const {httpError, ctrlWrapper, sendEmail } = require('../helpers');
 const cloudinary = require('cloudinary').v2;
 require('dotenv').config();
 
-//const {Book} = require("../db/models/book");
-//const bcrypt = require("bcrypt");
-//const jwt = require('jsonwebtoken');
-//const {v4} = require('uuid');
-//const path = require("path");
-
-
-
 const {SECRET_KEY, BASE_URL} = process.env;
 
 

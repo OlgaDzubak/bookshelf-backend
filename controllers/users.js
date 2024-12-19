@@ -28,7 +28,8 @@ const {SECRET_KEY, BASE_URL} = process.env;
   const updateUser = async (req, res) => {
 
     if (req.fileValidationError){
-      throw httpError(500,"Error! Wrong file format. Only png/jpg/jpeg files are allowed.")
+      return res.status(500).json({message: "Error! Wrong file format. Only png/jpg/jpeg files are allowed."});
+     // throw httpError(500,"Error! Wrong file format. Only png/jpg/jpeg files are allowed.")
     }
     
     let newUserName, newAvatarURL, usr;

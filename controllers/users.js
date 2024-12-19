@@ -28,7 +28,7 @@ const {SECRET_KEY, BASE_URL} = process.env;
   const updateUser = async (req, res) => {
 
     if (req.fileValidationError){
-      new httpError(500, "Wrong file format.");
+      throw httpError(500, "Wrong file format.");
     }
     
     let newUserName, newAvatarURL, usr;

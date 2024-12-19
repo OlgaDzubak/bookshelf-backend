@@ -42,8 +42,6 @@ const authenticate = async (req, res, next) => {
 
         }catch(error){
             
-            console.log("auth error = ", error);
- 
             if (error="TokenExpiredError"){                                                    // якщо збіг термін дії accesToken то пробуємо оновити його за допомогою RefreshToken
                 console.log("accessToken is invalid");
                 const {refreshToken} = req.cookies;

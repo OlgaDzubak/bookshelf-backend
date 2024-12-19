@@ -35,6 +35,10 @@ const {SECRET_KEY, BASE_URL} = process.env;
 // оновлення даних про поточного користувача (можемо оновити або аватар, або ім'я юзера - user profile window)
   const updateUser = async (req, res) => {
 
+    if (req.fileValidationError){
+      throw httpError(500,"Error! Wrong file format. Only png/jpg/jpeg files are allowed.")
+    }
+    
     let newUserName, newAvatarURL, usr;
     
     const {id, name: currentUserName} = req.user;                                                   //забираємо поточне ім'я юзера

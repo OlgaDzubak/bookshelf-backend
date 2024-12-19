@@ -35,7 +35,8 @@ const storage = new CloudinaryStorage({
 
 const upload = multer({ storage,
                         fileFilter: (req, file, cb)=>{
-                            if (file.mimetype !== 'image/png') {
+                          const formatsArray = ['image/png', 'image/jpeg', 'image/jpg'];
+                            if (formatsArray.indexOf(file.mimetype) === -1) {
                               console.log("file = ", file);
                               req.fileValidationError = 'goes wrong on the mimetype';
                               return cb(null, false, new Error('goes wrong on the mimetype'));

@@ -7,7 +7,7 @@ const errorMessageList = {
 }
 
 const httpError = (status, message = errorMessageList[status]) => {
-    console.log("httpError = ", error);
+    console.log("httpError = ", message);
     const error = new Error(message);
     error.status = status;
     return error;

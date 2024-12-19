@@ -33,7 +33,12 @@ const storage = new CloudinaryStorage({
       },
 });
 
-const upload = multer({ storage });
+const upload = multer({ storage
+                        // fileFilter: (req, file, next)=>{
+                        //     if (){
+                        //       return next(null, false, );
+                        //     };
+                      });
   
 
 //----------------------------------------------------------------------------------------------

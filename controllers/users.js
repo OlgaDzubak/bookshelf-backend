@@ -27,16 +27,10 @@ const {SECRET_KEY, BASE_URL} = process.env;
 // оновлення даних про поточного користувача (можемо оновити або аватар, або ім'я юзера - user profile window)
   const updateUser = async (req, res) => {
 
-    if (req.fileValidationError){
-      return res.status(500).json({message: "Wrong file format."});
-     // throw httpError(500,"Error! Wrong file format. Only png/jpg/jpeg files are allowed.")
-    }
-    
     let newUserName, newAvatarURL, usr;
     
     const {id, name: currentUserName} = req.user;                                                   //забираємо поточне ім'я юзера
     const {name} = req.body;                                                                        //забираємо нове ім'я юзера
-    console.log("fileValidationError = ",req.fileValidationError);
     
     if (!name) { 
       newUserName = currentUserName;
@@ -48,13 +42,18 @@ const {SECRET_KEY, BASE_URL} = process.env;
     if (!req.file) {                                                                            // якщо нового файлу аватара немає, то змінемо лише ім'я юзера
       usr = await User.findByIdAndUpdate(id, {name: newUserName}, {new: true});                 // оновлюємо ім'я поточного юзера   
     }else {                                                                                     // якщо є новий файл аватара, то закидуємо йього на claudinary, та оновлюємо name і avatatURL юзера
+
+        if (req.fileValidationError){
+          return res.status(500).json({message: "Wrong file format."});
+        }
+          
         newAvatarURL = req.file.path;
         cloudinary.uploader.upload_stream({ resource_type: 'image' }, (error, result) => {
           if (error) {  
               console.error(error);
-              return res.status(500).json({message: "Cloudinary uploading error."});
+              return res.status(500).json({message: error.message});
           }
-          const { secure_url: newAvatarURL} = result;                                                 // отрисуємо з claudinary новий URL аватара 
+          const { secure_url: newAvatarURL} = result;                                                 // отрисуємо з cloudinary новий URL аватара 
         
         }).end(req.file.buffer);
 

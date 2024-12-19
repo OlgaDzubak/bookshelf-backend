@@ -1,5 +1,6 @@
 const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const {httpError} = require('../helpers');
 const multer = require('multer');
 
 
@@ -35,11 +36,11 @@ const storage = new CloudinaryStorage({
 
 const upload = multer({ storage,
                         fileFilter: (req, file, cb)=>{
-                          const formatsArray = ['image/png', 'image/jpeg', 'image/jpg'];
+                            const formatsArray = ['image/png', 'image/jpeg', 'image/jpg'];
                             if (formatsArray.indexOf(file.mimetype) === -1) {
-                              console.log("file = ", file);
-                              req.fileValidationError = 'goes wrong on the mimetype';
-                              return cb(null, false, new Error('goes wrong on the mimetype'));
+                              // console.log("file = ", file);
+                              // req.fileValidationError = 'goes wrong on the mimetype';
+                              return cb(httpError(500,"Wrong file format!"));
                              }
                              cb(null, true);
                         }

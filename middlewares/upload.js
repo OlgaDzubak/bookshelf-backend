@@ -40,6 +40,7 @@ const upload = multer({ storage,
                               return cb(null, false, new Error('goes wrong on the mimetype'));
                              }
                              cb(null, true);
+                        }
                      });
   
 

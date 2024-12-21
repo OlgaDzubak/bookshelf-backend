@@ -53,14 +53,14 @@ const {SECRET_KEY, BASE_URL} = process.env;
 
         console.log("newAvatarURL=",newAvatarURL);   
 
-        // cloudinary.uploader.upload_stream({ resource_type: 'image' }, (error, result) => {
-        //   if (error) {  
-        //       console.error("cloudinary error = ",error);
-        //       return res.status(500).json({message: error.message});
-        //   }
-        //   const { secure_url: newAvatarURL} = result;
+        cloudinary.uploader.upload_stream({ resource_type: 'image' }, (error, result) => {
+          if (error) {  
+              console.error("cloudinary error = ",error);
+              return res.status(500).json({message: error.message});
+          }
+          const { secure_url: newAvatarURL} = result;
         
-        // }).end(req.file.buffer);
+        }).end(req.file.buffer);
 
         console.log("після req.file.buffer");  
 

@@ -2,7 +2,7 @@ const {User} = require("../db/models/user");
 const {httpError, ctrlWrapper, streamUpload, sendEmail} = require('../helpers');
 require('dotenv').config();
 const {SECRET_KEY, BASE_URL} = process.env;
-const claudinary = require('cloudinary').v2;
+const cloudinary = require('cloudinary').v2;
 
 
 //------ КОНТРОЛЛЕРИ ДЛЯ РОБОТИ ІЗ КОЛЛЕКЦІЄЮ USERS (для залогіненого юзера) -----------------------------

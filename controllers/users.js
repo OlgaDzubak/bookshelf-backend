@@ -64,9 +64,11 @@ const {SECRET_KEY, BASE_URL} = process.env;
         
         }).end(req.file.buffer);
 
+        console.log("після req.file.buffer");  
+
         usr = await User.findByIdAndUpdate(id, {name: newUserName, avatarURL: newAvatarURL}, {new: true});
     };
-    
+
     console.log("я попереду  res.status(200).json({");  
 
     res.status(200).json({
@@ -79,7 +81,7 @@ const {SECRET_KEY, BASE_URL} = process.env;
                           }
                          });    
                          
-
+    console.log("я після  res.status(200).json({");  
   }
 
 // надсилання листа з повідомленням про підписку на розсилку

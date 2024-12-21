@@ -11,9 +11,7 @@ const authenticate = async (req, res, next) => {
 
     let user={};
     const {authorization = ""} = req.headers;
-
     const [bearer, accessToken] = authorization.split(" ");                                     // забираємо з заголовків запиту accessToken    
-    console.log("accessToken=",accessToken);
 
     if ((bearer !== "Bearer") || (!accessToken)) {
         next(httpError(401, "Not authorized"));

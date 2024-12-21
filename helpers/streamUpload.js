@@ -1,3 +1,5 @@
+const fs = require('fs/promises');
+
 const streamUpload =(req)=>{
 
     return new Promise((resolve,reject)=>{

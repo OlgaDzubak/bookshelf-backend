@@ -66,7 +66,8 @@ const {SECRET_KEY, BASE_URL} = process.env;
 
           if (error) {  
               console.error("cloudinary error = ",error);
-              return res.status(500).json({message: error.message});
+              res.status(500).json({message: error.message});
+              return;
           }
           const { secure_url: newAvatarURL} = result;
         

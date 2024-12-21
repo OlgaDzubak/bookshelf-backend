@@ -30,14 +30,13 @@ const {SECRET_KEY, BASE_URL} = process.env;
     console.log("я в updateUser");
 
     if (req.fileValidationError){
-      console.log("in req.fileValidationError");
       throw httpError(500, "Wrong file format.");
     }
     
     let newUserName, newAvatarURL, usr;
     
-    const {id, name: currentUserName} = req.user;                                                   //забираємо поточне ім'я юзера
-    const {name} = req.body;                                                                        //забираємо нове ім'я юзера
+    const {id, name: currentUserName} = req.user;
+    const {name} = req.body;
     
     if (!name) { 
       newUserName = currentUserName;
@@ -47,7 +46,6 @@ const {SECRET_KEY, BASE_URL} = process.env;
 
     
     if (!req.file) {   
-      console.log("я в updateUser if (!req.file) {");
       usr = await User.findByIdAndUpdate(id, {name: newUserName}, {new: true});
     }else {   
         console.log("я в updateUser if (req.file) {");   
@@ -55,14 +53,14 @@ const {SECRET_KEY, BASE_URL} = process.env;
 
         console.log("newAvatarURL=",newAvatarURL);   
 
-        cloudinary.uploader.upload_stream({ resource_type: 'image' }, (error, result) => {
-          if (error) {  
-              console.error("cloudinary error = ",error);
-              return res.status(500).json({message: error.message});
-          }
-          const { secure_url: newAvatarURL} = result;                                                 // отрисуємо з cloudinary новий URL аватара 
+        // cloudinary.uploader.upload_stream({ resource_type: 'image' }, (error, result) => {
+        //   if (error) {  
+        //       console.error("cloudinary error = ",error);
+        //       return res.status(500).json({message: error.message});
+        //   }
+        //   const { secure_url: newAvatarURL} = result;
         
-        }).end(req.file.buffer);
+        // }).end(req.file.buffer);
 
         console.log("після req.file.buffer");  
 

@@ -55,7 +55,7 @@ const {SECRET_KEY, BASE_URL} = process.env;
         
         newAvatarURL = req.file.path;
         
-        console.log(req.file.buffer);
+        console.log("req.file.buffer",req.file.buffer);
 
         const result = await streamUpload(req.file.buffer);
         console.log("result = ",result);

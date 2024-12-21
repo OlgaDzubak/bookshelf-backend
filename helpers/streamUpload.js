@@ -13,8 +13,8 @@ const streamUpload = (req) => {
             }
         });
 
-        console.log("req.file = ", req.file);
-        fs.createReadStream(req.file.path).pipe(stream);
+        console.log("req.file.buffer = ", req.file.buffer);
+        fs.createReadStream(req.file.buffer).pipe(stream);
 
     });
 }

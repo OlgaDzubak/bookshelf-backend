@@ -27,8 +27,8 @@ const storage = new CloudinaryStorage({
               allowed_formats: ["jpg", "png"],
               public_id: file.originalname, 
               transformation: [
-                                { height: 250, crop: "scale" },
-                                { height: 250, crop: "scale" },
+                                { height: 200, crop: "scale" },
+                                { height: 500, crop: "scale" },
                               ],
               };
       },

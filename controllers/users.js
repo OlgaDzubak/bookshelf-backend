@@ -1,6 +1,5 @@
 const {User} = require("../db/models/user");
 const {httpError, ctrlWrapper, streamUpload, sendEmail} = require('../helpers');
-const cloudinary = require('cloudinary').v2;
 require('dotenv').config();
 const {SECRET_KEY, BASE_URL} = process.env;
 

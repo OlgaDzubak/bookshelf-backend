@@ -61,20 +61,23 @@ const {SECRET_KEY, BASE_URL} = process.env;
         
         newAvatarURL = req.file.path;
 
-        cloudinary.uploader.upload_stream({ resource_type: 'image' }, (error, result) => {
+        const result = await streamUpload(req);
+        console.log(result);
+
+        // cloudinary.uploader.upload_stream({ resource_type: 'image' }, (error, result) => {
           
-          console.error("я в cloudinary");
+        //   console.error("я в cloudinary");
 
-          if (error) {  
-              console.error("cloudinary error = ",error);
-              res.status(500).json({message: error.message});
-              return;
-          }
-          const { secure_url: newAvatarURL} = result;
+        //   if (error) {  
+        //       console.error("cloudinary error = ",error);
+        //       res.status(500).json({message: error.message});
+        //       return;
+        //   }
+        //   const { secure_url: newAvatarURL} = result;
         
-        }).end(req.file.buffer);
+        // }).end(req.file.buffer);
 
-        usr = await User.findByIdAndUpdate(id, {name: newUserName, avatarURL: newAvatarURL}, {new: true});
+    //    usr = await User.findByIdAndUpdate(id, {name: newUserName, avatarURL: newAvatarURL}, {new: true});
     
         console.error("я перед res.status(200).json({");
         res.status(200).json({

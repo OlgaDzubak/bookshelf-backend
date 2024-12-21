@@ -25,8 +25,6 @@ const {SECRET_KEY, BASE_URL} = process.env;
 // оновлення даних про поточного користувача (можемо оновити або аватар та/або ім'я юзера)
   const updateUser = async (req, res) => {
     
-    console.log("я в updateUser");
-
     if (req.fileValidationError){
       throw httpError(500, "Wrong file format.");
     }
@@ -41,9 +39,7 @@ const {SECRET_KEY, BASE_URL} = process.env;
     }else { 
       newUserName = name;
     }
-
-    console.log("req.file = ", req.file);
-    
+     
     if (!req.file) {   
       usr = await User.findByIdAndUpdate(id, {name: newUserName}, {new: true});
       res.status(200).json({
@@ -58,13 +54,12 @@ const {SECRET_KEY, BASE_URL} = process.env;
     }else {   
         
         newAvatarURL = req.file.path;
-
-        const result = await streamUpload(newAvatarURL);
+        
+        const result = await streamUpload(req.file.buffer);
         console.log(result);
 
         usr = await User.findByIdAndUpdate(id, {name: newUserName, avatarURL: newAvatarURL}, {new: true});
     
-        console.error("я перед res.status(200).json({");
         res.status(200).json({
                               "accessToken": usr.accessToken,
                               "user": {
@@ -74,7 +69,6 @@ const {SECRET_KEY, BASE_URL} = process.env;
                                 "shopping_list": usr.shopping_list,
                               }
                             });    
-        console.error("я після res.status(200).json({");
     }
 
   }

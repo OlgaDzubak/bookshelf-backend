@@ -45,7 +45,7 @@ const upload = multer({ storage,
                             }
 
                             console.log("я в fileFilter cb(null, true);");
-                            cb(null, true);
+                             cb(null, true);
                         }
                      });
   

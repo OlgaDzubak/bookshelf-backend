@@ -44,6 +44,7 @@ const {SECRET_KEY, BASE_URL} = process.env;
       newUserName = name;
     }
 
+    console.log("req.file = ", req.file);
     
     if (!req.file) {   
       usr = await User.findByIdAndUpdate(id, {name: newUserName}, {new: true});

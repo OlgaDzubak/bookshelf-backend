@@ -1,4 +1,4 @@
-const fs = require('fs/promises');
+const fs = require('fs');
 const cloudinary = require('cloudinary').v2;
 
 const streamUpload = (req) => {

@@ -26,8 +26,11 @@ const {SECRET_KEY, BASE_URL} = process.env;
 
 // оновлення даних про поточного користувача (можемо оновити або аватар та/або ім'я юзера)
   const updateUser = async (req, res) => {
+    
+    console.log("я в updateUser");
 
     if (req.fileValidationError){
+      console.log("in req.fileValidationError");
       throw httpError(500, "Wrong file format.");
     }
     
@@ -43,9 +46,11 @@ const {SECRET_KEY, BASE_URL} = process.env;
     };
 
     
-    if (!req.file) {                                                                            // якщо нового файлу аватара немає, то змінемо лише ім'я юзера
+    if (!req.file) {   
+      console.log("я в updateUser if (!req.file) {");                                                                         // якщо нового файлу аватара немає, то змінемо лише ім'я юзера
       usr = await User.findByIdAndUpdate(id, {name: newUserName}, {new: true});                 // оновлюємо ім'я поточного юзера   
-    }else {                                                                                     // якщо є новий файл аватара, то закидуємо йього на claudinary, та оновлюємо name і avatatURL юзера
+    }else {   
+        console.log("я в updateUser if (req.file) {");                                                                                  // якщо є новий файл аватара, то закидуємо йього на claudinary, та оновлюємо name і avatatURL юзера
         newAvatarURL = req.file.path;
         cloudinary.uploader.upload_stream({ resource_type: 'image' }, (error, result) => {
           if (error) {  
@@ -67,7 +72,7 @@ const {SECRET_KEY, BASE_URL} = process.env;
                             "avatarURL": usr.avatarURL,
                             "shopping_list": usr.shopping_list,
                           }
-                        });                
+                         });                
   }
 
 // надсилання листа з повідомленням про підписку на розсилку

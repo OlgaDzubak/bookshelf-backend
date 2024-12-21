@@ -8,7 +8,7 @@ const {SECRET_KEY} = process.env;
 
 // middleware <authenticate> для перевірки токена
 const authenticate = async (req, res, next) => {
-
+    console.log("я в authenticate");
     let user={};
     const {authorization = ""} = req.headers;
     const [bearer, accessToken] = authorization.split(" ");                                     // забираємо з заголовків запиту accessToken    

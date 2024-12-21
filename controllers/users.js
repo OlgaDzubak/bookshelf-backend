@@ -27,8 +27,7 @@ const {SECRET_KEY, BASE_URL} = process.env;
 // оновлення даних про поточного користувача (можемо оновити або аватар та/або ім'я юзера)
   const updateUser = async (req, res) => {
     
-    console.log("я в updateUser");
-
+    
     if (req.fileValidationError){
       throw httpError(500, "Wrong file format.");
     }
@@ -42,16 +41,23 @@ const {SECRET_KEY, BASE_URL} = process.env;
       newUserName = currentUserName;
     }else { 
       newUserName = name;
-    };
+    }
 
     
     if (!req.file) {   
       usr = await User.findByIdAndUpdate(id, {name: newUserName}, {new: true});
+      res.status(200).json({
+                              "accessToken": usr.accessToken,
+                              "user": {
+                                "name": usr.name,
+                                "email": usr.email,
+                                "avatarURL": usr.avatarURL,
+                                "shopping_list": usr.shopping_list,
+                              }
+                           });   
     }else {   
-        console.log("я в updateUser if (req.file) {");   
+        
         newAvatarURL = req.file.path;
-
-        console.log("newAvatarURL=",newAvatarURL);   
 
         cloudinary.uploader.upload_stream({ resource_type: 'image' }, (error, result) => {
           
@@ -65,24 +71,20 @@ const {SECRET_KEY, BASE_URL} = process.env;
         
         }).end(req.file.buffer);
 
-        console.log("після req.file.buffer");  
-
         usr = await User.findByIdAndUpdate(id, {name: newUserName, avatarURL: newAvatarURL}, {new: true});
-    };
+    
+        res.status(200).json({
+                              "accessToken": usr.accessToken,
+                              "user": {
+                                "name": usr.name,
+                                "email": usr.email,
+                                "avatarURL": usr.avatarURL,
+                                "shopping_list": usr.shopping_list,
+                              }
+                            });    
+      
+    }
 
-    console.log("я попереду  res.status(200).json({");  
-
-    res.status(200).json({
-                          "accessToken": usr.accessToken,
-                          "user": {
-                            "name": usr.name,
-                            "email": usr.email,
-                            "avatarURL": usr.avatarURL,
-                            "shopping_list": usr.shopping_list,
-                          }
-                         });    
-                         
-    console.log("я після  res.status(200).json({");  
   }
 
 // надсилання листа з повідомленням про підписку на розсилку

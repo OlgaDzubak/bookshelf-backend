@@ -56,7 +56,7 @@ const {SECRET_KEY, BASE_URL} = process.env;
         newAvatarURL = req.file.path;
         
         const result = await streamUpload(req.file.buffer);
-        console.log(result);
+        console.log("result = ",result);
 
         usr = await User.findByIdAndUpdate(id, {name: newUserName, avatarURL: newAvatarURL}, {new: true});
     

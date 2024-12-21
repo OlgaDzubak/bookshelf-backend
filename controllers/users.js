@@ -1,8 +1,7 @@
 const {User} = require("../db/models/user");
-const {httpError, ctrlWrapper, streamUpload, sendEmail} = require('../helpers');
+const {httpError, ctrlWrapper, sendEmail} = require('../helpers');
 require('dotenv').config();
 const {SECRET_KEY, BASE_URL} = process.env;
-const cloudinary = require('cloudinary').v2;
 
 
 //------ КОНТРОЛЛЕРИ ДЛЯ РОБОТИ ІЗ КОЛЛЕКЦІЄЮ USERS (для залогіненого юзера) -----------------------------
@@ -43,46 +42,20 @@ const cloudinary = require('cloudinary').v2;
      
     if (!req.file) {   
       usr = await User.findByIdAndUpdate(id, {name: newUserName}, {new: true});
-      res.status(200).json({
-                              "accessToken": usr.accessToken,
-                              "user": {
-                                "name": usr.name,
-                                "email": usr.email,
-                                "avatarURL": usr.avatarURL,
-                                "shopping_list": usr.shopping_list,
-                              }
-                           });   
     }else {   
-        
         newAvatarURL = req.file.path;
-        
-        console.log("req.file.buffer",req.file.buffer);
-
-        await cloudinary.uploader.upload_stream({ resource_type: 'image' }, (error, result) => {
-          if (error) {   
-              console.error(error);
-              return res.status(500).json({ message: 'Помилка при завантаженні на Cloudinary' });
-          }
-          const { secure_url: newAvatarURL} = result;                                                 // отрисуємо з claudinary новий URL аватара 
-        
-        }).end(req.file.buffer);
-
-        // const result = await streamUpload(req.file.buffer);
-        // console.log("result = ",result);
-
         usr = await User.findByIdAndUpdate(id, {name: newUserName, avatarURL: newAvatarURL}, {new: true});
-    
-        res.status(200).json({
-                              "accessToken": usr.accessToken,
-                              "user": {
-                                "name": usr.name,
-                                "email": usr.email,
-                                "avatarURL": usr.avatarURL,
-                                "shopping_list": usr.shopping_list,
-                              }
-                            });    
     }
 
+    res.status(200).json({
+                          "accessToken": usr.accessToken,
+                          "user": {
+                            "name": usr.name,
+                            "email": usr.email,
+                            "avatarURL": usr.avatarURL,
+                            "shopping_list": usr.shopping_list,
+                          }
+                        });    
   }
 
 // надсилання листа з повідомленням про підписку на розсилку

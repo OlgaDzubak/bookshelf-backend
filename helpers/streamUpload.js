@@ -13,7 +13,6 @@ const streamUpload = (req) => {
             }
         });
 
-        console.log("req.file.buffer = ", req.file.buffer);
         fs.createReadStream(req.file.buffer).pipe(stream);
 
     });

@@ -74,6 +74,7 @@ const {SECRET_KEY, BASE_URL} = process.env;
 
         usr = await User.findByIdAndUpdate(id, {name: newUserName, avatarURL: newAvatarURL}, {new: true});
     
+        console.error("я перед res.status(200).json({");
         res.status(200).json({
                               "accessToken": usr.accessToken,
                               "user": {
@@ -83,7 +84,7 @@ const {SECRET_KEY, BASE_URL} = process.env;
                                 "shopping_list": usr.shopping_list,
                               }
                             });    
-      
+        console.error("я після res.status(200).json({");
     }
 
   }

@@ -11,9 +11,12 @@ const authenticate = async (req, res, next) => {
 
     let user={};
     const {authorization = ""} = req.headers;
+
+    console.log("authorization=",authorization);
+    
     const [bearer, accessToken] = authorization.split(" ");                                     // забираємо з заголовків запиту accessToken    
     
-    if (bearer !== "Bearer") {
+    if ((bearer !== "Bearer") || (!accessToken)) {
         next(httpError(401, "Not authorized"));
     }
     

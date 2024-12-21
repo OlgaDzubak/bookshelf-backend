@@ -54,10 +54,11 @@ const {SECRET_KEY, BASE_URL} = process.env;
         newAvatarURL = req.file.path;
 
         console.log("newAvatarURL=",newAvatarURL);   
+
         cloudinary.uploader.upload_stream({ resource_type: 'image' }, (error, result) => {
           if (error) {  
-              console.error(error);
-              res.status(500).json({message: error.message});
+              console.error("error = ",error);
+              return res.status(500).json({message: error.message});
           }
           const { secure_url: newAvatarURL} = result;                                                 // отрисуємо з cloudinary новий URL аватара 
         
@@ -65,6 +66,8 @@ const {SECRET_KEY, BASE_URL} = process.env;
 
         usr = await User.findByIdAndUpdate(id, {name: newUserName, avatarURL: newAvatarURL}, {new: true});
     };
+    
+    console.log("я попереду  res.status(200).json({");  
 
     res.status(200).json({
                           "accessToken": usr.accessToken,

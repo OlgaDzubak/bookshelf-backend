@@ -1,7 +1,7 @@
 const fs = require('fs');
 const cloudinary = require('cloudinary').v2;
 
-const streamUpload = (req) => {
+const streamUpload = (filepath) => {
 
     return new Promise((resolve, reject) => {
 
@@ -13,7 +13,7 @@ const streamUpload = (req) => {
             }
         });
 
-        fs.createReadStream(req.file.buffer).pipe(stream);
+        fs.createReadStream(filepath).pipe(stream);
 
     });
 }

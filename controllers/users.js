@@ -47,11 +47,13 @@ const {SECRET_KEY, BASE_URL} = process.env;
 
     
     if (!req.file) {   
-      console.log("я в updateUser if (!req.file) {");                                                                         // якщо нового файлу аватара немає, то змінемо лише ім'я юзера
-      usr = await User.findByIdAndUpdate(id, {name: newUserName}, {new: true});                 // оновлюємо ім'я поточного юзера   
+      console.log("я в updateUser if (!req.file) {");
+      usr = await User.findByIdAndUpdate(id, {name: newUserName}, {new: true});
     }else {   
-        console.log("я в updateUser if (req.file) {");                                                                                  // якщо є новий файл аватара, то закидуємо йього на claudinary, та оновлюємо name і avatatURL юзера
+        console.log("я в updateUser if (req.file) {");   
         newAvatarURL = req.file.path;
+
+        console.log("newAvatarURL=",newAvatarURL);   
         cloudinary.uploader.upload_stream({ resource_type: 'image' }, (error, result) => {
           if (error) {  
               console.error(error);
@@ -61,7 +63,7 @@ const {SECRET_KEY, BASE_URL} = process.env;
         
         }).end(req.file.buffer);
 
-        usr = await User.findByIdAndUpdate(id, {name: newUserName, avatarURL: newAvatarURL}, {new: true}); // оновлюємо поля name та avatarURL для поточного юзера в базі
+        usr = await User.findByIdAndUpdate(id, {name: newUserName, avatarURL: newAvatarURL}, {new: true});
     };
 
     res.status(200).json({
@@ -72,7 +74,9 @@ const {SECRET_KEY, BASE_URL} = process.env;
                             "avatarURL": usr.avatarURL,
                             "shopping_list": usr.shopping_list,
                           }
-                         });                
+                         });    
+                         
+    console.log(res.data);
   }
 
 // надсилання листа з повідомленням про підписку на розсилку

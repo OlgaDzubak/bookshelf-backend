@@ -57,8 +57,17 @@ const {SECRET_KEY, BASE_URL} = process.env;
         
         console.log("req.file.buffer",req.file.buffer);
 
-        const result = await streamUpload(req.file.buffer);
-        console.log("result = ",result);
+        await cloudinary.uploader.upload_stream({ resource_type: 'image' }, (error, result) => {
+          if (error) {   
+              console.error(error);
+              return res.status(500).json({ message: 'Помилка при завантаженні на Cloudinary' });
+          }
+          const { secure_url: newAvatarURL} = result;                                                 // отрисуємо з claudinary новий URL аватара 
+        
+        }).end(req.file.buffer);
+
+        // const result = await streamUpload(req.file.buffer);
+        // console.log("result = ",result);
 
         usr = await User.findByIdAndUpdate(id, {name: newUserName, avatarURL: newAvatarURL}, {new: true});
     

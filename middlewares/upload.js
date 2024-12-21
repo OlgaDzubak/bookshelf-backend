@@ -36,16 +36,13 @@ const storage = new CloudinaryStorage({
 
 const upload = multer({ storage,
                         fileFilter: (req, file, cb)=>{
-                          console.log("я в fileFilter");
                             const formatsArray = ['image/png', 'image/jpeg', 'image/jpg'];
 
                             if (formatsArray.indexOf(file.mimetype) === -1) {
-                              console.log("я в fileFilter === -1");
                               return cb(httpError(500,"Wrong file format!"));
                             }
 
-                            console.log("я в fileFilter cb(null, true);");
-                             cb(null, true);
+                            cb(null, true);
                         }
                      });
   

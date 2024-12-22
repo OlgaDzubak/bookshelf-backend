@@ -2,7 +2,7 @@ const { Schema, model } = require("mongoose");
 const joi = require("joi");
 
 // регулярні вирази для email та раполя користувача
-const nameRegExp = /[a-z]?(.|\-)+(\w+|\b)/;
+const nameRegExp = /^(?![\d+_@.-]+$)[a-zA-Z0-9+_@.-]*$/;
 const emailRegExp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 const passRegExp = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/;
 
@@ -94,7 +94,7 @@ const now = new Date();
                                         err.message = `name field should have ${err.local.limit} characters maximum!`;
                                         break;
                         case "string.pattern.base" :
-                                        err.message = "name field must be a valid ";
+                                        err.message = 'wrong name, only letters, digits and symbols "+ _ @ . -" are allowed!';
                                         break;
                         default:        break;
                     }
@@ -199,6 +199,9 @@ const now = new Date();
                                         break;
                         case "string.max":
                                         err.message = `name field should have ${err.local.limit} characters maximum!`;
+                                        break;
+                        case "string.pattern.base" :
+                                        err.message = 'wrong name, only letters, digits and symbols "+ _ @ . -" are allowed!';
                                         break;
                         default:
                                         break;

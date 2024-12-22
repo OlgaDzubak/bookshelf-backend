@@ -29,13 +29,9 @@ const {SECRET_KEY, BASE_URL} = process.env;
 
     const avatarURL = gravatar.url(email);
     
-    const newUser = await User.create({name : name || "User", email, password: hashPassword, avatarURL}); // створюємо в базі нового юзера  
+    const newUser = await User.create({name : name, email, password: hashPassword, avatarURL}); // створюємо в базі нового юзера  
 
     const tokens = generateAccessAndRefreshToken(newUser._id, 1 , 2); //24 * 60 , 5 * 24 * 60);       // генеруємо access та refresh токени на добу та 5 діб відповідно
-    
-    if (!name){
-      name = `User_${newUser._id}`;
-    }
 
     await User.findByIdAndUpdate(newUser._id, { name, "accessToken":tokens.accessToken, "refreshToken":tokens.refreshToken }, {new: true});
    

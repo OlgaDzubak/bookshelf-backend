@@ -79,12 +79,9 @@ const now = new Date();
 // ----- СХЕМИ ВАЛІДАЦІЇ ДАНИХ В ТІЛІ HTTP-запиту ДО КОЛЕКЦІЇ USERS (кастомні повідомлення про помилки)----------------------
     
     const signUpSchema = joi.object({
-        name : joi.string().required().min(2).max(30).error(errors => {
+        name : joi.string().min(2).max(30).error(errors => {
             errors.forEach(err => {
                 switch (err.code) {
-                        case "string.empty":
-                                        err.message = "name field should not be empty!";
-                                        break;
                         case "string.min":
                                         err.message = `name field should have at least ${err.local.limit} characters!`;
                                         break;

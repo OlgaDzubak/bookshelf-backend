@@ -82,9 +82,6 @@ const now = new Date();
         name : joi.string().required().min(2).max(30).error(errors => {
             errors.forEach(err => {
                 switch (err.code) {
-                        case "string.empty":
-                                        err.message = "name field should not be empty!";
-                                        break;
                         case "string.min":
                                         err.message = `name field should have at least ${err.local.limit} characters!`;
                                         break;

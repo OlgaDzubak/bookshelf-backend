@@ -14,7 +14,7 @@ const now = new Date();
             //дані з форми регістрації
             name: {
                 type: String,
-                required: [true, 'Set name for user'],
+                // required: [true, 'Set name for user'],
                 match: nameRegExp,
                 minlength: 2,
                 maxlength: 30,

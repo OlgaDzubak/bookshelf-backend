@@ -14,10 +14,11 @@ const now = new Date();
             //дані з форми регістрації
             name: {
                 type: String,
+                required: [true, 'Set name for user'],
+                default: "User",
                 match: nameRegExp,
                 minlength: 2,
                 maxlength: 30,
-                default: "User",                
             },
             email: {
                 type: String,
@@ -78,9 +79,12 @@ const now = new Date();
 // ----- СХЕМИ ВАЛІДАЦІЇ ДАНИХ В ТІЛІ HTTP-запиту ДО КОЛЕКЦІЇ USERS (кастомні повідомлення про помилки)----------------------
     
     const signUpSchema = joi.object({
-        name : joi.min(2).max(30).error(errors => {
+        name : joi.string().pattern(nameRegExp).required().min(2).max(30).error(errors => {
             errors.forEach(err => {
                 switch (err.code) {
+                        case "string.empty":
+                                        err.message = "name field should not be empty!";
+                                        break;
                         case "string.min":
                                         err.message = `name field should have at least ${err.local.limit} characters!`;
                                         break;
@@ -182,9 +186,12 @@ const now = new Date();
     });
 
     const updateSchema = joi.object({
-        name : joi.min(2).max(30).error(errors => {
+        name : joi.string().min(2).max(30).error(errors => {
             errors.forEach(err => {
                 switch (err.code) {
+                        case "string.empty":
+                                        err.message = "name field should not be empty!";
+                                        break;
                         case "string.min":
                                         err.message = `name field should have at least ${err.local.limit} characters!`;
                                         break;

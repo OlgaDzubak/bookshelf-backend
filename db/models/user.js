@@ -2,6 +2,7 @@ const { Schema, model } = require("mongoose");
 const joi = require("joi");
 
 // регулярні вирази для email та раполя користувача
+const nameRegExp = /[a-z]?(.|\-)+(\w+|\b)/;
 const emailRegExp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 const passRegExp = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/;
 
@@ -14,6 +15,7 @@ const now = new Date();
             name: {
                 type: String,
                 required: [true, 'Set name for user'],
+                match: nameRegExp,
                 minlength: 2,
                 maxlength: 30,
             },
@@ -91,8 +93,10 @@ const now = new Date();
                         case "string.max":
                                         err.message = `name field should have ${err.local.limit} characters maximum!`;
                                         break;
-                        default:
+                        case "string.pattern.base" :
+                                        err.message = "name field must be a valid ";
                                         break;
+                        default:        break;
                     }
             });
             return errors;

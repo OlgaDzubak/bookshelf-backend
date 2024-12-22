@@ -2,7 +2,7 @@ const { Schema, model } = require("mongoose");
 const joi = require("joi");
 
 // регулярні вирази для email та раполя користувача
-const nameRegExp = /"^([\w\.\-]+)(([a-zA-Z]+)[0-9]*)$"/;
+const nameRegExp = /^([\w\.\-]+)(([a-zA-Z]+)[0-9]*)$/;
 const emailRegExp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 const passRegExp = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/;
 

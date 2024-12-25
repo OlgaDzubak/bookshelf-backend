@@ -188,7 +188,7 @@ const {SECRET_KEY, BASE_URL} = process.env;
     if (!user) { throw httpError(401, "Not authorized"); }
 
     const refreshTokenOptions = {
-      expires: new Date(Date.now() - 1000),               // 
+      expires: new Date(Date.now() - 1000),               // ставлю минулий час для того щоб видалити refreshToken з cookie
       maxAge: 0,
       httpOnly: true,
       secure: true,
@@ -196,7 +196,6 @@ const {SECRET_KEY, BASE_URL} = process.env;
       partitioned: true                       
     }
 
-    //res.clearCookie('refreshToken');
     res.cookie('refreshToken', user.refreshToken, refreshTokenOptions);
     res.status(204).json({});
   }

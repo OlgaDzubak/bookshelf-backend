@@ -187,7 +187,17 @@ const {SECRET_KEY, BASE_URL} = process.env;
 
     if (!user) { throw httpError(401, "Not authorized"); }
 
+    // const refreshTokenOptions = {
+    //   //expires: new Date(Date.now() + 1000 * 60 * 15),               // 
+    //   maxAge: 0,
+    //   httpOnly: true,
+    //   secure: true,
+    //   sameSite: 'none',
+    //   partitioned: true                       
+    // }
+
     res.clearCookie('refreshToken');
+    
     res.status(204).json({});
   }
 

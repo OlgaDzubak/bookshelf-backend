@@ -181,8 +181,9 @@ const {SECRET_KEY, BASE_URL} = process.env;
 
 // + розавторизація користувача
   const signout = async (req, res) => {
-    const {_id} = req.user;
-    const user = await User.findByIdAndUpdate(_id, {accessToken: "", refreshToken: ""});
+
+    const {id} = req.user;
+    const user = await User.findByIdAndUpdate(id, {accessToken: "", refreshToken: ""});
     if (!user) { throw httpError(401, "Not authorized"); }
     res.status(204).json({});
   }

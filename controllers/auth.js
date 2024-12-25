@@ -184,7 +184,10 @@ const {SECRET_KEY, BASE_URL} = process.env;
 
     const {id} = req.user;
     const user = await User.findByIdAndUpdate(id, {accessToken: "", refreshToken: ""});
+
     if (!user) { throw httpError(401, "Not authorized"); }
+
+    res.clearCookie('refreshToken');
     res.status(204).json({});
   }
 

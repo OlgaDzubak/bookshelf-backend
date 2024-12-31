@@ -4,13 +4,6 @@ const bcrypt = require("bcrypt");
 require('dotenv').config();
 const gravatar = require("gravatar");
 
-//const jwt = require('jsonwebtoken');
-//const {v4} = require('uuid');
-//const path = require("path");
-//const { Console } = require("console");
-//const fs = require("fs").promises;
-
-
 const {SECRET_KEY, BASE_URL} = process.env; 
 
 //------ КОНТРОЛЛЕРИ ДЛЯ РОБОТИ ІЗ КОЛЛЕКЦІЄЮ USERS (для реєстрації, авторизації, розаавторизації) ----------------------------
@@ -18,20 +11,20 @@ const {SECRET_KEY, BASE_URL} = process.env;
 // + реєстрація нового користувача
   const signup = async (req, res) => {
 
-    const {name, email, password} = req.body;                                 // забираємо з запиту дані юзера
+    const {name, email, password} = req.body;
     
-    const user = await User.findOne({email});                                 // перевіряємо чи немає в базі юзера з таким email
-    if (user) {                                                               // якщо є, то видаємо помилку
+    const user = await User.findOne({email});
+    if (user) {
       throw httpError(409, "Email in use");
     }
 
-    const hashPassword = await bcrypt.hash(password, 10);                     // хешуємо пароль
+    const hashPassword = await bcrypt.hash(password, 10);
 
     const avatarURL = gravatar.url(email);
     
-    const newUser = await User.create({name : name, email, password: hashPassword, avatarURL}); // створюємо в базі нового юзера  
+    const newUser = await User.create({name : name, email, password: hashPassword, avatarURL});
 
-    const tokens = generateAccessAndRefreshToken(newUser._id, 1 , 2); //24 * 60 , 5 * 24 * 60);       // генеруємо access та refresh токени на добу та 5 діб відповідно
+    const tokens = generateAccessAndRefreshToken(newUser._id, 24 * 60 , 5 * 24 * 60);
 
     await User.findByIdAndUpdate(newUser._id, { name, "accessToken":tokens.accessToken, "refreshToken":tokens.refreshToken }, {new: true});
    
@@ -50,17 +43,20 @@ const {SECRET_KEY, BASE_URL} = process.env;
     // await sendEmail(verifyEmail);
 
     // ----------------------------------------------------------
-    res.cookie('refreshToken', tokens.refreshToken, {       
-      expires: new Date(Date.now() + (3 * 60 * 1000)),       //(5 * 24 * 60 * 60 * 1000)),         // термін зберігання refresh-токена в cookie
-      httpOnly: true,
-      secure: true,
-      sameSite: 'none',
-      partitioned: true
-    });
+
+    res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate")
+       .cookie('refreshToken', tokens.refreshToken, {       
+                                                      expires: new Date(Date.now() + (5 * 24 * 60 * 60 * 1000)),
+                                                      httpOnly: true,
+                                                      secure: true,
+                                                      sameSite: 'none',
+                                                      partitioned: true
+                                                     }
+              );
 
 
     res.status(201)
-       .json({                                                                   // повертаємо в response об'єкт з access-токеном та юзером
+       .json({
               "accessToken": tokens.accessToken, 
               "user": {
                 "name": newUser.name,
@@ -91,7 +87,6 @@ const {SECRET_KEY, BASE_URL} = process.env;
     if (!user) {throw httpError(401, 'User not found')}
     if (user.verify){ throw httpError(400, 'Verification has already been passed') }
 
-    //відправляємо на email юзера лист для верифікації пошти 
     const verifyEmail = {
       to: email,
       subject: "Verify email",
@@ -106,21 +101,19 @@ const {SECRET_KEY, BASE_URL} = process.env;
 // + авторизація користувача
   const signin = async (req, res) => {
     
-    console.log(req.body);
+    const {email, password} = req.body;                                    
+    const user = await User.findOne({email});           
     
-    const {email, password} = req.body;                                           // отримуэмо з запиту email та пароль користувача
-    const user = await User.findOne({email});                                     // перевіряємо наявність користувача, шукаємо за email
+    if (!user) { throw httpError(401, "Email or Password is wrong"); }       
     
-    if (!user) { throw httpError(401, "Email or Password is wrong"); }            // якщо юзера з email в базі немає, то видаємо помилку
-    
-    const comparePassword = await bcrypt.compare(password, user.password);        // перевіряємо пароль юзера
-    if (!comparePassword){ throw httpError(401, "Email or Password is wrong"); }  // якщо пароль не вірний, то видаємо помилку
+    const comparePassword = await bcrypt.compare(password, user.password); 
+    if (!comparePassword){ throw httpError(401, "Email or Password is wrong"); }
 
-    const tokens = generateAccessAndRefreshToken(user._id, 24 * 60 , 5 * 24 * 60);// по id користувача генеруємо два токени accessToken та refreshToken
+    const tokens = generateAccessAndRefreshToken(user._id, 24 * 60 , 5 * 24 * 60);
     
-    //if (!user.verify) { throw httpError(401,"Email or password is wrong");}     // перевіряємо чи пройшов email юзера верифікацію
+    //if (!user.verify) { throw httpError(401,"Email or password is wrong");}
 
-    await User.findByIdAndUpdate(user._id, tokens);                               // записуємо токени в базу користувачів
+    await User.findByIdAndUpdate(user._id, tokens);
 
     const refreshTokenOptions = {
       expires: new Date(Date.now() +  (5 * 24 * 60 * 60 * 1000)),                 // термін зберігання refresh-токена в cookie
@@ -131,9 +124,10 @@ const {SECRET_KEY, BASE_URL} = process.env;
     }
 
     res.status(200)
+       .setHeader("Cache-Control", "no-cache, no-store, must-revalidate")
        .cookie('refreshToken', tokens.refreshToken, refreshTokenOptions)
        .json({  
-              "accessToken": tokens.accessToken,                                                                  // повертаємо в response об'єкт з access-токеном, юзером та refresh-токено в кукі
+              "accessToken": tokens.accessToken,
               "user": {
                   "name": user.name,
                   "email": user.email,
@@ -195,9 +189,11 @@ const {SECRET_KEY, BASE_URL} = process.env;
       sameSite: 'none',
       partitioned: true                       
     }
-
-    res.cookie('refreshToken', user.refreshToken, refreshTokenOptions);
-    res.status(204).json({});
+    
+    res.status(204)
+       .setHeader("Cache-Control", "no-cache, no-store, must-revalidate")
+       .cookie('refreshToken', user.refreshToken, refreshTokenOptions)
+       .json({});
   }
 
 //---------------------------------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 const {User} = require("../db/models/user");
 const {httpError, ctrlWrapper, sendEmail} = require('../helpers');
 require('dotenv').config();
-const {SECRET_KEY, BASE_URL} = process.env;
+const {BASE_URL} = process.env;
 
 
 //------ КОНТРОЛЛЕРИ ДЛЯ РОБОТИ ІЗ КОЛЛЕКЦІЄЮ USERS (для залогіненого юзера) -----------------------------
@@ -47,6 +47,7 @@ const {SECRET_KEY, BASE_URL} = process.env;
         usr = await User.findByIdAndUpdate(id, {name: newUserName, avatarURL: newAvatarURL}, {new: true});
     }
 
+    res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
     res.status(200).json({
                           "accessToken": usr.accessToken,
                           "user": {
@@ -62,7 +63,6 @@ const {SECRET_KEY, BASE_URL} = process.env;
   const subscribe = async(req, res) => {
       const {email, name} = req.user;
        
-      // створюємо поштове повідомлення
        const EmailAboutSubscription = {
         to: email,
         subject: `Subscription message from ${BASE_URL}`,
@@ -76,7 +76,6 @@ const {SECRET_KEY, BASE_URL} = process.env;
                 </p>`
       };
       
-      // відправляємо на email юзера лист з повіломленням про підписку
       await sendEmail(EmailAboutSubscription);
 
       res.json( { message: `Subscribtion successful. Letters about subscribtion was sent to your email ${email}` } );

@@ -1,7 +1,6 @@
 const { Book } = require('../db/models/book');
 const { User } = require('../db/models/user');
 const { httpError, ctrlWrapper} = require('../helpers');
-const { mongoose } = require("mongoose");
 
 
 //------ КОНТРОЛЛЕРИ ДЛЯ РОБОТИ ІЗ КОЛЛЕКЦІЄЮ BOOKS ( для маршрута /books) ----------------------------
@@ -57,6 +56,7 @@ const { mongoose } = require("mongoose");
       res.json(book);
     }
 
+
     // функції для роботи з shopping list
     const getShoppingListBooks = async (req, res) => {
 
@@ -96,6 +96,8 @@ const { mongoose } = require("mongoose");
       const result = await User.findByIdAndUpdate( userId, { $push: { shopping_list : bookId } }, { new: true } );
       
       const {accessToken, shopping_list: newShopping_list} = result;
+
+      res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
       res.status(201).json({
         "accessToken": accessToken,
         "shopping_list": newShopping_list,
@@ -116,6 +118,7 @@ const { mongoose } = require("mongoose");
       
       const {accessToken, shopping_list: newShopping_list} = result;
 
+      res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
       res.status(201).json({
         "accessToken": accessToken,
         "shopping_list": newShopping_list,

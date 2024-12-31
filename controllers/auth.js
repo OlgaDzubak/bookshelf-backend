@@ -44,7 +44,7 @@ const {SECRET_KEY, BASE_URL} = process.env;
 
     // ----------------------------------------------------------
 
-    res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate")
+    res.setHeader("Cache-Control", "no-store, must-revalidate")
        .cookie('refreshToken', tokens.refreshToken, {       
                                                       expires: new Date(Date.now() + (5 * 24 * 60 * 60 * 1000)),
                                                       httpOnly: true,
@@ -124,7 +124,7 @@ const {SECRET_KEY, BASE_URL} = process.env;
     }
 
     res.status(200)
-       .setHeader("Cache-Control", "no-cache, no-store, must-revalidate")
+       .setHeader("Cache-Control", "no-store, must-revalidate")
        .cookie('refreshToken', tokens.refreshToken, refreshTokenOptions)
        .json({  
               "accessToken": tokens.accessToken,
@@ -191,7 +191,7 @@ const {SECRET_KEY, BASE_URL} = process.env;
     }
     
     res.status(204)
-       .setHeader("Cache-Control", "no-cache, no-store, must-revalidate")
+       .setHeader("Cache-Control", "no-store, must-revalidate")
        .cookie('refreshToken', user.refreshToken, refreshTokenOptions)
        .json({});
   }

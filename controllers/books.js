@@ -97,7 +97,7 @@ const { httpError, ctrlWrapper} = require('../helpers');
       
       const {accessToken, shopping_list: newShopping_list} = result;
 
-      res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+      res.setHeader("Cache-Control", "no-store, must-revalidate");
       res.status(201).json({
         "accessToken": accessToken,
         "shopping_list": newShopping_list,
@@ -118,7 +118,7 @@ const { httpError, ctrlWrapper} = require('../helpers');
       
       const {accessToken, shopping_list: newShopping_list} = result;
 
-      res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+      res.setHeader("Cache-Control", "no-store, must-revalidate");
       res.status(201).json({
         "accessToken": accessToken,
         "shopping_list": newShopping_list,

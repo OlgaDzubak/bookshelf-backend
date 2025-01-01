@@ -42,19 +42,19 @@ const authenticate = async (req, res, next) => {
         }catch(error){
             
             if (error="TokenExpiredError"){                                                    // якщо збіг термін дії accesToken то пробуємо оновити його за допомогою RefreshToken
-                console.log("accessToken is invalid");
+
                 const {refreshToken} = req.cookies;
 
                 try{
                     const {id} = jwt.verify(refreshToken, SECRET_KEY);                             // перевіряємо refreshToken (якщо токен не валідний, то catch перехватить помилку и видасть 'Not authorized')
-                    console.log("refreshToken is valid");
+
                     user = await User.findById(id);                                               // шукаємо в базі юзера за йього id
 
                     if (!user || (!user.refreshToken) || (user.refreshToken != refreshToken)) {    // якщо юзер не знайдений або refreshToken відсутній або не відповідає refreshToken юзера то видаємо помилку 
                         next(httpError(401, "Not authorized"));
                     }
                     
-                    const tokens = generateAccessAndRefreshToken(id, 24 * 60, 5 * 24 * 60);       // доба та 5 діб;  генеруємо нову пару accessToken та refreshToken на 15 та 420 хвилин терміну дії відповідно
+                    const tokens = generateAccessAndRefreshToken(id, 24 * 60, 5 * 24 * 60);       // генеруємо нову пару accessToken та refreshToken на 1 добу та 5 діб;
                     
                     await User.findByIdAndUpdate(user.id, tokens);                               // оновлюємо токени в базі користувачів
 
@@ -82,15 +82,13 @@ const authenticate = async (req, res, next) => {
                     next();                    
 
                 }catch(error){
-                    console.log("refreshTokenExpiredError");
+
                     next(httpError(401, "Not authorized"));
                 }
             }
         }
         
     }catch(error){
-
-        console.log(error);
         next(httpError(401, "Not authorized"));
         
     }

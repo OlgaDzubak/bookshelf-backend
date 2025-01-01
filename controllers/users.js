@@ -47,7 +47,6 @@ const {BASE_URL} = process.env;
         usr = await User.findByIdAndUpdate(id, {name: newUserName, avatarURL: newAvatarURL}, {new: true});
     }
 
-    res.setHeader("Cache-Control", "no-store, must-revalidate");
     res.status(200).json({
                           "accessToken": usr.accessToken,
                           "user": {
